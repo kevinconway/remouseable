@@ -28,15 +28,7 @@ TOOLS ::= $(TOOLS) github.com/matm/gocov-html
 TOOLS ::= $(TOOLS) github.com/AlekSi/gocov-xml
 TOOLS ::= $(TOOLS) github.com/wadey/gocovmerge
 
-# Determine which packages to unit test. During unit testing we only execute
-# tests from sub-packages. If the project is found to be a service, e.g.
-# contains a main.go at the root, then we trim the root package from the list so
-# it is not considered for coverage reports.
-HAS_MAIN = $(shell test -e $(PROJECT_PATH)/main.go && echo -n 'yes')
-UNIT_PKGS = $(shell go list ./... | paste -sd "," -)
-ifeq ($(HAS_MAIN),yes)
 UNIT_PKGS = $(shell go list ./... | sed 1d | paste -sd "," -)
-endif
 
 update:
 	GO111MODULE=on go get -u
@@ -116,13 +108,11 @@ _runintegration:
 		./tests
 
 build:
-ifeq ($(HAS_MAIN),yes)
 	# Optionally build the service if it has an executable
 	# present in the project root.
 	GO111MODULE=on \
 	GOFLAGS="$(GOFLAGS)" \
 	go build -o $(BUILDNAME) main.go
-endif
 
 generate: $(BINDIR)
 	# Run any code generation steps.

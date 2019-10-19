@@ -44,15 +44,12 @@ script:
 - make lint
 - make test
 - make coverage
-- cd "${TRAVIS_BUILD_DIR}"
 - make BUILDNAME=${TRAVIS_OS_NAME} build
-before_deploy:
-- cd "${TRAVIS_BUILD_DIR}"
 deploy:
   provider: releases
   api_key:
     secure: n2pSGM0ygiIptoWD/D9W0VokURsI8p44+qFsBbMuWz1kG3agzsHfJR8ufvYVYnl3CelupOHoU11+uM/R3am5djnqVkpYZhdvJznEaLzdPZeLDuMaMF0GLm6o5UFpcA0nf/68RAaLaBg4iXCBrSfN5nnrscxdmKOfQ1V8PwhkIZNkKXaXBK2myx9o6uhSfuRYHvXlTtZ01R8Yy7l/3TB6I841OuGMsxI/klDPFF/6DYe0bbgmh6Q6FRAsGAZGfrWGUGa4g5gi9cBpYGyR0vZfMxy4nlSaF2Owi9Pguj/8gWabmHLDSyWZqDOcrp2VlVALMNTMeP+0s2MNkp9CbFjlngMoykh1cV/wC/OGKyWasqKLAgX+HTDhGjDIsbhEyaK9RydKUSW4CNAoOJU3jzONOrCocFsmuGRP7H9XoS2XDK7X4cbCJEIbkgqQqSPRKz+i4fdPE5eUiSlxvy4QDE24YUrcIdpyND0naF1OMqyqkMqXVHf2cmqqMWYSoz3FRy4uLs81Mq2hFcQBjYKoSSrJ5UfKrtU5PZy7UpGDPRvCzVaiXpRrCZgRVhuDAAZPa3CvJmN5xDYUTjRc42fziIAwwbtAB0uq40O3xdIYGxt1GaUnagaucbU1aBbc3T/X/o/yDdUA/os6hXSh6FtKdIm/qGD+jssvHi44ILDYdaeTmuw=
-  file: "./${TRAVIS_OS_NAME}"
+  file: "${TRAVIS_BUILD_DIR}/${TRAVIS_OS_NAME}"
   on:
     repo: kevinconway/remouseable
     tags: true
