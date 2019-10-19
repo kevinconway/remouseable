@@ -146,6 +146,8 @@ linters:
     - funlen
     - wsl
     - gocognit
+    - unused # Disabled because it seems to break if there is no vendor.
+    - typecheck # Disabled because it seems to break if there is no vendor.
 
 issues:
   # List of regexps of issue texts to exclude, empty list by default. But
