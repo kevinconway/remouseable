@@ -206,5 +206,6 @@ device. This project needs to read data from a remote device.
 
 A lot of the low level device interfaces like `evdev` and `hid` are new to me
 and I'm still learning them. Getting solid OSX support is top of my list to
-complete. Figuring out how to handle the tilt and pressure events in a way that
-enable full graphics tablet functionality on the host would be next.
+complete. Support for multiple monitors would be next. After that, figuring out
+how to handle the tilt and pressure events in a way that enable full graphics
+tablet functionality on the host would be next.
