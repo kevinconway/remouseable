@@ -5,10 +5,12 @@ import (
 	"io/ioutil"
 	"net"
 	"os"
+	"syscall"
 
 	flag "github.com/spf13/pflag"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/agent"
+	"golang.org/x/crypto/ssh/terminal"
 
 	remouse "github.com/kevinconway/remouse/pkg"
 )
@@ -26,11 +28,19 @@ func main() {
 	screenWidth := fs.Int("screen-width", tmpScreenWidth, "The max units per millimeter of the host screen width. Probably don't change this.")
 	sshIP := fs.String("ssh-ip", "10.11.99.1:22", "The host and port of a tablet.")
 	sshUser := fs.String("ssh-user", "root", "The ssh username to use when logging into the tablet.")
-	sshPassword := fs.String("ssh-password", "", "An optional password to use when ssh-ing into the tablet. If not given then public/private keypair authentication is used.")
+	sshPassword := fs.String("ssh-password", "", "An optional password to use when ssh-ing into the tablet. Use - for a prompt rather than entering a value. If not given then public/private keypair authentication is used.")
 	sshSocket := fs.String("ssh-socket", os.Getenv("SSH_AUTH_SOCK"), "Path to the SSH auth socket. This must not be empty if using public/private keypair authentication.")
 	evtFile := fs.String("event-file", "/dev/input/event0", "The path on the tablet from which to read evdev events. Probably don't change this.")
 	_ = fs.Parse(os.Args[1:])
 
+	if *sshPassword == "-" {
+		fmt.Print("Enter Password: ")
+		pwd, err := terminal.ReadPassword(int(syscall.Stdin))
+		if err != nil {
+			panic(err)
+		}
+		*sshPassword = string(pwd)
+	}
 	sshConfig := &ssh.ClientConfig{
 		User: *sshUser,
 		Auth: []ssh.AuthMethod{
@@ -88,15 +98,6 @@ func main() {
 		PressureThreshold: 1000,
 	}
 	defer sm.Close()
-
-	for sm.Next() {
-		ch := sm.Current()
-		if ch.Type() == remouse.ChangeTypeMove {
-			chh := ch.(*remouse.StateChangeMove)
-			fmt.Println(chh.X, chh.Y)
-		}
-	}
-	panic("STOP")
 
 	var sc remouse.PositionScaler
 	switch *orientation {
