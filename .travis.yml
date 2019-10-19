@@ -5,6 +5,7 @@ addons:
   homebrew:
     packages:
     - go@1.13
+    - make
   apt:
     packages:
     - gcc
@@ -27,10 +28,10 @@ os:
 install:
   - GO111MODULE=on go get
 script:
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then export PATH="$(brew --prefix)/opt/make/libexec/gnubin:${PATH}" ; fi
   - make tools
   - make lint
   - make test
-  - make integration
   - make coverage
   - make BUILDNAME=${TRAVIS_OS_NAME} build
 deploy:
