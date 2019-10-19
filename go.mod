@@ -1,4 +1,4 @@
-module github.com/kevinconway/remouse
+module github.com/kevinconway/remouseable
 
 go 1.13
 

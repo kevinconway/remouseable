@@ -1,4 +1,4 @@
-module github.com/kevinconway/remouse/tools
+module github.com/kevinconway/remouseable/tools
 
 go 1.13
 

@@ -1,3 +1,17 @@
+// This file is part of remouseable.
+//
+// remouseable is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 3 as published
+// by the Free Software Foundation.
+//
+// remouseable is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with remouseable.  If not, see <https://www.gnu.org/licenses/>.
+
 // Package main generates a Go source file that contains a mapping of all
 // evdev codes by extracting them from the linux source code files.
 package main
@@ -61,7 +75,7 @@ func main() {
 		panic(err)
 	}
 
-	f := jen.NewFile("remouse")
+	f := jen.NewFile("remouseable")
 	f.Comment("// Code generated DO NOT EDIT").Line()
 	f.Comment(
 		fmt.Sprintf(

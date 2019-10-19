@@ -1,3 +1,17 @@
+// This file is part of remouseable.
+//
+// remouseable is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 3 as published
+// by the Free Software Foundation.
+//
+// remouseable is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with remouseable.  If not, see <https://www.gnu.org/licenses/>.
+
 package main
 
 import (
@@ -12,17 +26,17 @@ import (
 	"golang.org/x/crypto/ssh/agent"
 	"golang.org/x/crypto/ssh/terminal"
 
-	remouse "github.com/kevinconway/remouse/pkg"
+	remouseable "github.com/kevinconway/remouseable/pkg"
 )
 
 func main() {
 
-	driver := &remouse.RobotgoDriver{}
+	driver := &remouseable.RobotgoDriver{}
 
-	fs := flag.NewFlagSet("remouse", flag.ExitOnError)
+	fs := flag.NewFlagSet("remouseable", flag.ExitOnError)
 	orientation := fs.String("orientation", "right", "Orientation of the tablet. Choices are vertical, right, and left")
-	tabletHeight := fs.Int("tablet-height", remouse.DefaultTabletHeight, "The max units per millimeter for the hight of the tablet. Probably don't change this.")
-	tabletWidth := fs.Int("tablet-width", remouse.DefaultTabletWidth, "The max units per millimeter for the width of the tablet. Probably don't change this.")
+	tabletHeight := fs.Int("tablet-height", remouseable.DefaultTabletHeight, "The max units per millimeter for the hight of the tablet. Probably don't change this.")
+	tabletWidth := fs.Int("tablet-width", remouseable.DefaultTabletWidth, "The max units per millimeter for the width of the tablet. Probably don't change this.")
 	tmpScreenWidth, tmpScreenHeight, _ := driver.GetSize()
 	screenHeight := fs.Int("screen-height", tmpScreenHeight, "The max units per millimeter of the host screen height. Probably don't change this.")
 	screenWidth := fs.Int("screen-width", tmpScreenWidth, "The max units per millimeter of the host screen width. Probably don't change this.")
@@ -85,38 +99,38 @@ func main() {
 		panic(err)
 	}
 
-	it := &remouse.SelectingEvdevIterator{
-		Wrapped: &remouse.FileEvdevIterator{
+	it := &remouseable.SelectingEvdevIterator{
+		Wrapped: &remouseable.FileEvdevIterator{
 			Source: ioutil.NopCloser(pipe),
 		},
-		Selection: []uint16{remouse.EV_ABS},
+		Selection: []uint16{remouseable.EV_ABS},
 	}
 	defer it.Close()
 
-	sm := &remouse.EvdevStateMachine{
+	sm := &remouseable.EvdevStateMachine{
 		Iterator:          it,
 		PressureThreshold: 1000,
 	}
 	defer sm.Close()
 
-	var sc remouse.PositionScaler
+	var sc remouseable.PositionScaler
 	switch *orientation {
 	case "right":
-		sc = &remouse.RightPositionScaler{
+		sc = &remouseable.RightPositionScaler{
 			TabletWidth:  *tabletWidth,
 			TabletHeight: *tabletHeight,
 			ScreenWidth:  *screenWidth,
 			ScreenHeight: *screenHeight,
 		}
 	case "left":
-		sc = &remouse.LeftPositionScaler{
+		sc = &remouseable.LeftPositionScaler{
 			TabletWidth:  *tabletWidth,
 			TabletHeight: *tabletHeight,
 			ScreenWidth:  *screenWidth,
 			ScreenHeight: *screenHeight,
 		}
 	case "vertical":
-		sc = &remouse.VerticalPositionScaler{
+		sc = &remouseable.VerticalPositionScaler{
 			TabletWidth:  *tabletWidth,
 			TabletHeight: *tabletHeight,
 			ScreenWidth:  *screenWidth,
@@ -126,13 +140,13 @@ func main() {
 		panic(fmt.Sprintf("unknown orienation selection %s", *orientation))
 	}
 
-	rt := &remouse.Runtime{
+	rt := &remouseable.Runtime{
 		PositionScaler: sc,
 		StateMachine:   sm,
 		Driver:         driver,
 	}
 
-	fmt.Println("Remouse connected and running.")
+	fmt.Println("remouseable connected and running.")
 	for rt.Next() {
 	}
 	if err = rt.Close(); err != nil {

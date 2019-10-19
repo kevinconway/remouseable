@@ -1,17 +1,37 @@
-package remouse
+// This file is part of remouseable.
+//
+// remouseable is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License version 3 as published
+// by the Free Software Foundation.
+//
+// remouseable is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with remouseable.  If not, see <https://www.gnu.org/licenses/>.
+
+package remouseable
 
 const (
 	// DefaultTabletHeight is the standard max height value that can be measured
 	// on a remarkable tablet. Height is the measure of the maximum x coordinate
 	// value of the tablet screen. The tablet screen is actually oriented
 	// horizontally with the origin in the upper left corner when the top of the
-	// device (power button) is on the right.
+	// device (power button) is on the right. Note that this magic number value
+	// is not documented anywhere but was discovered by printing out the X value
+	// events from evdev and using the stylus to draw a line to the edge of the
+	// device screen.
 	DefaultTabletHeight = 15725
 	// DefaultTabletWidth is the standard max width value that can be measured
 	// on a remarkable tablet. Width is the measure of the maximum y coordinate
 	// value of the tablet screen. The tablet screen is actually oriented
 	// horizontally with the origin in the upper left corner when the top of the
-	// device (power button) is on the right.
+	// device (power button) is on the right. Note that this magic number value
+	// is not documented anywhere but was discovered by printing out the X value
+	// events from evdev and using the stylus to draw a line to the edge of the
+	// device screen.
 	DefaultTabletWidth = 20967
 )
 

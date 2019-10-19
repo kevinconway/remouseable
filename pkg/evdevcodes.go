@@ -1,4 +1,4 @@
-package remouse
+package remouseable
 
 // Code generated DO NOT EDIT
 
