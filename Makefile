@@ -13,6 +13,7 @@ COVERINTERCHANGE = $(COVEROUT:.out=.interchange)
 COVERHTML = $(COVEROUT:.out=.html)
 COVERXML = $(COVEROUT:.out=.xml)
 COVERCOMBINED ::= $(COVERDIR)/combined.out
+BUILDNAME = remouse
 
 # Tools need to be enumerated here in order to support updating them.
 # They will only be used in the context of the /tools directory which
@@ -120,7 +121,7 @@ ifeq ($(HAS_MAIN),yes)
 	# present in the project root.
 	GO111MODULE=on \
 	GOFLAGS="$(GOFLAGS)" \
-	go build main.go
+	go build -o $(BUILDNAME) main.go
 endif
 
 generate: $(BINDIR)

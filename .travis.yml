@@ -1,0 +1,43 @@
+language: go
+go:
+  - "1.13.x"
+addons:
+  homebrew:
+    packages:
+    - go@1.13
+  apt:
+    packages:
+    - gcc
+    - libc6-dev
+    - libx11-dev
+    - xorg-dev
+    - libxtst-dev
+    - libpng++-dev
+    - xcb
+    - libxcb-xkb-dev
+    - x11-xkb-utils
+    - libx11-xcb-dev
+    - libxkbcommon-x11-dev
+    - libxkbcommon-dev
+    - xsel
+    - xclip
+os:
+  - linux
+  - osx
+install:
+  - GO111MODULE=on go get
+script:
+  - make tools
+  - make lint
+  - make test
+  - make integration
+  - make coverage
+  - make BUILDNAME=${TRAVIS_OS_NAME} build
+deploy:
+  provider: releases
+  api_key:
+    secure: "A4EktK23egirnKzVQV7/ExhoByY2gpblD33lhX91D81CBhIuGsNIHiU/1hBWkBDAy8Ov4W1kLl4AwBrdG7oo5k4fNCpvfPw6a9sRbNPTnn7uw0QWhlbIIyNMj+/qNNsGGNAmxhjoATBNvjHVU+wfHkQXc7n8WfKtssDZEmQm6a6+v3ByVrw7fvItCfTH075t+TYJdHdx1QVSEZ4reFsC2Xdwk3Wy4cEE7MlT7iaae1U2P7elHonL1eNLHulS/GL9tn94snmCAmhcIFi8ykGA31QtKedDEc1zd1CUHrfRMFrIG4bwLcCUWgPSV0Ex5Vayf44N7NNpHLCDzzmgy5RLoPSUAvdAJCBfB0UMEtc19LGVglQO4PPq2PrOEXCyqsGjnt53W+bfBvTkuAiwy7AtQ9Nxyl/W2c/8RANBwzQyWBH57Yctd9u/8SuEdTWf2XiavvJcI9t5CYDMXmzeg74ms++4Oc+rYo6fP9c8WhzLJdFWDJkn8hJYB1Yh+NKnaQZi7s+JraScpGJ0j3MWtWn2NGE7vYUSdoNQAoOj2wxOAJfhHjErz6hdxPSvilUOHSvENBTAkMH94dWeQSm1NqJ0GxEmz9QhZS82LFDjMsdct1UXg3WS6x4G5FxWI7EYvbP1x0bMriLycZ3f/+0slM0qrm7cwAFRntvv8e8fZQ1EKVY="
+  file: ${TRAVIS_OS_NAME}
+  cleanup: false
+  on:
+    tags: true
