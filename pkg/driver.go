@@ -29,6 +29,6 @@ func (*RobotgoDriver) Unclick() error {
 func (*RobotgoDriver) MoveMouse(x int, y int) error {
 	// Reversing the x/y due to robotgo seemingly having an opposite
 	// x/y concept as the typical event source of evdev, etc.
-	robotgo.MoveMouse(y, x)
+	robotgo.MoveMouse(x, y)
 	return nil
 }

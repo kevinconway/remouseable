@@ -74,15 +74,17 @@ func (it *FileEvdevIterator) Close() error {
 type SelectingEvdevIterator struct {
 	Wrapped   EvdevIterator
 	Selection []uint16
+	current   EvdevEvent
 }
 
 // Next continually calls the wrapped Next() until it either returns a value
 // that matches the selection criteria or it returns a false.
 func (it *SelectingEvdevIterator) Next() bool {
 	for it.Wrapped.Next() {
-		t := it.Wrapped.Current().Type
+		c := it.Wrapped.Current()
 		for _, selection := range it.Selection {
-			if t == selection {
+			if c.Type == selection {
+				it.current = c
 				return true
 			}
 		}
@@ -92,7 +94,7 @@ func (it *SelectingEvdevIterator) Next() bool {
 
 // Current returns the active element.
 func (it *SelectingEvdevIterator) Current() EvdevEvent {
-	return it.Wrapped.Current()
+	return it.current
 }
 
 // Close proxies to the wrapped instance.
@@ -105,21 +107,23 @@ func (it *SelectingEvdevIterator) Close() error {
 type FilteringEvdevIterator struct {
 	Wrapped EvdevIterator
 	Filter  []uint16
+	current EvdevEvent
 }
 
 // Next continually calls the wrapped Next() until it either returns a value
 // that matches the filter criteria or it returns a false.
 func (it *FilteringEvdevIterator) Next() bool {
 	for it.Wrapped.Next() {
-		t := it.Wrapped.Current().Type
+		c := it.Wrapped.Current()
 		ok := true
 		for _, filter := range it.Filter {
-			if t == filter {
+			if c.Type == filter {
 				ok = false
 				break
 			}
 		}
 		if ok {
+			it.current = c
 			return true
 		}
 	}
@@ -128,7 +132,7 @@ func (it *FilteringEvdevIterator) Next() bool {
 
 // Current returns the active element.
 func (it *FilteringEvdevIterator) Current() EvdevEvent {
-	return it.Wrapped.Current()
+	return it.current
 }
 
 // Close proxies to the wrapped instance.
