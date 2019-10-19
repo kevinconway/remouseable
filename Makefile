@@ -114,7 +114,7 @@ _runintegration:
 		-coverprofile="$(COVERDIR)/integration.out" \
 		./tests
 
-build: generate
+build:
 ifeq ($(HAS_MAIN),yes)
 	# Optionally build the service if it has an executable
 	# present in the project root.
