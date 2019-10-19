@@ -1,13 +1,22 @@
 language: go
 go:
-  - "1.13.x"
+- 1.13.x
 services:
-  - xvfb
+- xvfb
 addons:
   homebrew:
     packages:
     - go@1.13
     - make
+    - coreutils
+    - findutils
+    - gnu-tar
+    - gnu-sed
+    - gawk
+    - gnutls
+    - gnu-indent
+    - gnu-getopt
+    - grep
   apt:
     packages:
     - gcc
@@ -25,22 +34,27 @@ addons:
     - xsel
     - xclip
 os:
-  - linux
-  - osx
+- linux
+- osx
 install:
-  - GO111MODULE=on go get
+- GO111MODULE=on go get
 script:
-  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then export PATH="$(brew --prefix)/opt/make/libexec/gnubin:${PATH}" ; fi
-  - make tools
-  - make lint
-  - make test
-  - make coverage
-  - make BUILDNAME=${TRAVIS_OS_NAME} build
+- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then export PATH="$(brew --prefix)/opt/make/libexec/gnubin:${PATH}" ; fi
+- make tools
+- make lint
+- make test
+- make coverage
+- cd "${TRAVIS_BUILD_DIR}"
+- make BUILDNAME=${TRAVIS_OS_NAME} build
+before_deploy:
+- cd "${TRAVIS_BUILD_DIR}"
 deploy:
   provider: releases
   api_key:
-    secure: "AkKGnjv8F84wq+B4TJiyvYLZzTwBCoSW9eLzSbtxFjxgJntfvg+Au7WvvOma1gaVKd35IKWGITLZ9D3K9n3cCcUbobaz31IsoFtpXSzS9atspx5dR8CPuntSrYB4NT6xBrLtV82tOvRrVfKW6LQPOEKOZwilEGRQ1vYy4GxqjfgiorFS9Hm5cif4iL2v/hkMKnVJvyXyEJAR0DAzs8WW0kvDF9niQr+0ReOIT9OpaywG8YmS8T1krdgtYaGlujBJF13/BIpYDxJzczfzPStnDUhAe3k/DfUxSjYn/yJxG/AzC3JYm7MaKKentz0Zrd1NuzS5AzaGqMgCREfHHiZoPSdX2C7dJ0zmMmSpOXiR5csFgkGs3Zq0wT4mQ3qfzo1CUmy3sRVqjL7lPvN0o8NQTnLka3/iGaJVGw5zip5Nv0O+551ReD1O5RubzovJVCkZclJwaMr/VxWnfoRuIt93hmsaoEu1x9/LznPNYJvXcUtLgmyM0RnUzJdQTOR3C0e5UAppoL+76sZqtnCwUOgv7j68bxlFbvAahem4v5Rpth72F4tIgkm8eJlVEmFtlf6/Ubpxi1D8rSTo9+wFfBkTr8b5XMtE7kJoUjneB+3d0PpOX1n59mcR2np7mgq9v0B1GYxRvjF9cFHKrFQCKpoNS4TgjiKSZ860MLpbUZNrY1g="
-  file: ${TRAVIS_OS_NAME}
-  cleanup: false
+    secure: n2pSGM0ygiIptoWD/D9W0VokURsI8p44+qFsBbMuWz1kG3agzsHfJR8ufvYVYnl3CelupOHoU11+uM/R3am5djnqVkpYZhdvJznEaLzdPZeLDuMaMF0GLm6o5UFpcA0nf/68RAaLaBg4iXCBrSfN5nnrscxdmKOfQ1V8PwhkIZNkKXaXBK2myx9o6uhSfuRYHvXlTtZ01R8Yy7l/3TB6I841OuGMsxI/klDPFF/6DYe0bbgmh6Q6FRAsGAZGfrWGUGa4g5gi9cBpYGyR0vZfMxy4nlSaF2Owi9Pguj/8gWabmHLDSyWZqDOcrp2VlVALMNTMeP+0s2MNkp9CbFjlngMoykh1cV/wC/OGKyWasqKLAgX+HTDhGjDIsbhEyaK9RydKUSW4CNAoOJU3jzONOrCocFsmuGRP7H9XoS2XDK7X4cbCJEIbkgqQqSPRKz+i4fdPE5eUiSlxvy4QDE24YUrcIdpyND0naF1OMqyqkMqXVHf2cmqqMWYSoz3FRy4uLs81Mq2hFcQBjYKoSSrJ5UfKrtU5PZy7UpGDPRvCzVaiXpRrCZgRVhuDAAZPa3CvJmN5xDYUTjRc42fziIAwwbtAB0uq40O3xdIYGxt1GaUnagaucbU1aBbc3T/X/o/yDdUA/os6hXSh6FtKdIm/qGD+jssvHi44ILDYdaeTmuw=
+  file: "./${TRAVIS_OS_NAME}"
   on:
+    repo: kevinconway/remouseable
     tags: true
+  skip_cleanup: true
+  cleanup: false
