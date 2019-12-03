@@ -14,9 +14,7 @@
 
 package remouseable
 
-import (
-	"github.com/go-vgo/robotgo"
-)
+import "github.com/kevinconway/remouseable/pkg/internal/robotgo"
 
 // RobotgoDriver implements Driver using the robotgo cgo library.
 type RobotgoDriver struct{}
