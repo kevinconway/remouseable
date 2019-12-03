@@ -30,7 +30,8 @@ os:
 install:
 - GO111MODULE=on go get
 script:
-- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then export PATH="$(brew --prefix)/opt/make/libexec/gnubin:${PATH}" && echo "OSX path modified for gnu tools" ; else echo "Path not modified for ${TRAVIS_OS_NAME}" ; fi
+- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then alias runmake="$(brew --prefix)/opt/make/libexec/gnubin:${PATH}"; else alias runmake="make" ; fi
+- type runmake
 - make tools
 - make lint
 - make test
