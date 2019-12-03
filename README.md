@@ -10,8 +10,8 @@ computer so I could write and draw on digital whiteboards. It turns out, it can!
 
 There's a great implementation of this feature written in Python at
 https://github.com/Evidlo/remarkable_mouse. I'm working on this implementation
-so that I can eventually offer pre-built binaries that don't require a
-specific language to be installed on the host machine.
+so that I can offer pre-built binaries that don't require a specific language to
+be installed on the host machine.
 
 ## Docs
 
@@ -22,15 +22,15 @@ the project. To view the code API documentation check out the
 ## Setup And Configuration
 
 The easiest way to get started is to download the pre-compiled binary from the
-latest release at https://github.com/kevinconway/remouseable/releases/latest. The
-files are named after the OS for which they are built. All builds are currently
-64 bit. If you need to build for a different environment see the `Building`
-section for instructions.
+latest release at https://github.com/kevinconway/remouseable/releases/latest.
+The files are named after the OS for which they are built. All builds are
+currently 64 bit. If you need to build for a different environment see the
+`Building` section for instructions.
 
 Most settings default to the correct values. The only value you should need to
 set in the common case is the SSH password for the tablet. This password value
-is found in the `About` tab of the tablet menu at the bottom of the
-`General Information` section. You may either give the password as text with
+is found in the `About` tab of the tablet menu at the bottom of the `General
+Information` section. You may either give the password as text with
 
 ```bash
 remouseable --ssh-password="XYZ123"
@@ -44,10 +44,11 @@ remouseable --ssh-password="-"
 
 Run one of these commands with your device connected over USB and your stylus
 will become a mouse. The stylus is actually active _before_ it touches the
-screen which means you can see your mouse move without directly touching the
-tablet. Once you touch the tablet surface with the stylus the computer mouse
-will click and hold down the left mouse button while you write or draw and then
-release the button when you lift the stylus.
+screen. This means you can see your mouse move by hovering the stylus just above
+the writing surface but without directly touching the tablet. Once you touch the
+tablet surface with the stylus the computer mouse will click and hold down the
+left mouse button while you write or draw and then release the button when you
+lift the stylus.
 
 ### Easier SSH Setup
 
@@ -57,11 +58,12 @@ use either password-less authentication or use a key pair that is encrypted with
 the password of your choice rather than the device's default password.
 
 If you'd like to create a key pair especially for accessing the reMarkable
-tablet then start with a guide like https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent that walks through
-creating a new key pair and registering it with your SSH agent. For advanced
-SSH users, such as those using the gpg-agent as the SSH agent, the reMouse
-application will talk to any valid SSH agent implementation so long as the
-`SSH_AUTH_SOCK` value is set correctly.
+tablet then start with a guide like
+<https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>
+that walks through creating a new key pair and registering it with your SSH
+agent. For advanced SSH users, such as those using the gpg-agent as the SSH
+agent, the reMouse application will talk to any valid SSH agent implementation
+so long as the `SSH_AUTH_SOCK` value is set correctly.
 
 Once you have a key pair ready, copy the public key value from `ssh-add -L` for
 the key you want to use. Then copy the key over to your tablet with:
@@ -112,15 +114,39 @@ exit status 2
 
 ## Building
 
-If you want to build this for a specific environment then first make sure you
-have all the system dependencies required by https://github.com/go-vgo/robotgo
-which is the default driver used to control the mouse. After that, it should be
-a matter of:
+The project should build under OSX, Linux, and Windows environments. To build
+your environment will need the following:
 
-```bash
-go get
-make build # alteratively, go build main.go if you want to pass custom options
+**All Environments**:
+
 ```
+Go1.13 or higher
+GCC
+```
+
+**OSX**:
+
+```
+Xcode
+Xcode command line tools
+```
+
+**Windows**:
+
+```
+MinGW-w64 (or other compiler)
+```
+
+**Linux**:
+
+```
+x11 dev headers
+xtst dev headers
+xorg dev headers
+```
+
+With those dependencies installed you can then run `make build` from the
+root of the repository to generate a binary.
 
 ## How It Works
 
@@ -135,8 +161,15 @@ into a mouse. It follows as:
     on the host machine.
 
 Each of these layers has an interface defined in the `pkg/domain.go` file.
-The mouse interactions on the host are performed by using
-https://github.com/go-vgo/robotgo.
+
+The mouse interactions on the host are performed by using a modified version of
+<https://github.com/go-vgo/robotgo>. The `pkg/internal/robotgo` directory
+contains a stripped down version of `robotgo` that contains only the portions
+required to detect the screen dimensions and send mouse events. The actual
+`robotgo` project contains support for a much larger set of features such as
+taking screen shots and controlling windows on the screen. However, each of
+those additional features comes with additional system dependencies that make
+creating a portable binary build difficult.
 
 ## License
 

@@ -5,6 +5,7 @@ services:
 - xvfb
 addons:
   homebrew:
+    update: true
     packages:
     - go@1.13
     - make
@@ -24,15 +25,6 @@ addons:
     - libx11-dev
     - xorg-dev
     - libxtst-dev
-    - libpng++-dev
-    - xcb
-    - libxcb-xkb-dev
-    - x11-xkb-utils
-    - libx11-xcb-dev
-    - libxkbcommon-x11-dev
-    - libxkbcommon-dev
-    - xsel
-    - xclip
 os:
 - linux
 - osx
