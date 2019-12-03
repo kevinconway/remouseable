@@ -30,13 +30,11 @@ os:
 install:
 - GO111MODULE=on go get
 script:
-- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then alias runmake="$(brew --prefix)/opt/make/libexec/gnubin:${PATH}"; else alias runmake="make" ; fi
-- type runmake
-- make tools
-- make lint
-- make test
-- make coverage
-- make BUILDNAME=${TRAVIS_OS_NAME} build
+- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then "$(brew --prefix)/opt/make/libexec/gnubin/make" tools; else make tools ; fi
+- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then "$(brew --prefix)/opt/make/libexec/gnubin/make" lint; else make lint ; fi
+- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then "$(brew --prefix)/opt/make/libexec/gnubin/make" test; else make test ; fi
+- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then "$(brew --prefix)/opt/make/libexec/gnubin/make" coverage; else make coverage ; fi
+- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then "$(brew --prefix)/opt/make/libexec/gnubin/make" BUILDNAME=${TRAVIS_OS_NAME} build; else make BUILDNAME=${TRAVIS_OS_NAME} build ; fi
 deploy:
   provider: releases
   api_key:
