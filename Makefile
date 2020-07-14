@@ -6,6 +6,7 @@
 PROJECT_PATH = $(shell pwd -L)
 TOOLSDIR = $(PROJECT_PATH)/tools
 BINDIR = $(PROJECT_PATH)/bin
+BUILDDIR = $(PROJECT_PATH)/.build
 GOFLAGS ::= ${GOFLAGS}
 COVERDIR = $(PROJECT_PATH)/.coverage
 COVEROUT = $(wildcard $(COVERDIR)/*.out)
@@ -107,12 +108,15 @@ _runintegration:
 		-coverprofile="$(COVERDIR)/integration.out" \
 		./tests
 
-build:
+build: $(BUILDDIR)
 	# Optionally build the service if it has an executable
 	# present in the project root.
 	GO111MODULE=on \
 	GOFLAGS="$(GOFLAGS)" \
-	go build -o $(BUILDNAME) main.go
+	go build -o $(BUILDDIR)/$(BUILDNAME) main.go
+
+$(BUILDDIR):
+	mkdir -p $(BUILDDIR)
 
 generate: $(BINDIR)
 	# Run any code generation steps.

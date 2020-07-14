@@ -907,5 +907,7 @@ bin/
 .antlr/
 # Static file bundles that can be created at build time.
 statik/statik.go
+# Project local build output directory
+.build/
 
 # End custom overrides

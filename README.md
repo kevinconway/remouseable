@@ -9,23 +9,17 @@ for a while I started wondering if it could be used as an input for my
 computer so I could write and draw on digital whiteboards. It turns out, it can!
 
 There's a great implementation of this feature written in Python at
-https://github.com/Evidlo/remarkable_mouse. I'm working on this implementation
-so that I can offer pre-built binaries that don't require a specific language to
-be installed on the host machine.
+<https://github.com/Evidlo/remarkable_mouse>. I'm working on this
+implementation so that I can offer pre-built binaries that don't require a
+specific language to be installed on the host machine.
 
-## Docs
+## Code Documentation
 
 This README contains how-to information for installing, configuration, and using
 the project. To view the code API documentation check out the
 [godocs](https://godoc.org/github.com/kevinconway/remouseable).
 
-## Setup And Configuration
-
-The easiest way to get started is to download the pre-compiled binary from the
-latest release at https://github.com/kevinconway/remouseable/releases/latest.
-The files are named after the OS for which they are built. All builds are
-currently 64 bit. If you need to build for a different environment see the
-`Building` section for instructions.
+## Usage
 
 Most settings default to the correct values. The only value you should need to
 set in the common case is the SSH password for the tablet. This password value
@@ -77,6 +71,9 @@ echo 'INSERT YOUR PUBLIC KEY HERE' >> ~/.ssh/authorized_keys
 Now future connections over SSH will leverage your key pair and you can omit
 the usual password flag when running the application.
 
+Note that windows builds cannot use this option due to incompatibilities with
+the current version of the windows ssh-agent.
+
 ### Wireless Tablet
 
 The default expectation is that you will have your tablet connected over USB
@@ -114,39 +111,78 @@ exit status 2
 
 ## Building
 
-The project should build under OSX, Linux, and Windows environments. To build
-your environment will need the following:
+There are pre-build binaries attached to each release that should work for all
+64bit versions of linux, osx, and windows. However, if you prefer to generate
+your own build then the following sections detail building a binary on
+different platforms.
 
-**All Environments**:
+### Linux
 
-```
-Go1.13 or higher
-GCC
-```
+Linux builds are dependent on:
 
-**OSX**:
+- gcc
+- x11 dev headers
+- xtst dev headers
+- xorg dev headers
 
-```
-Xcode
-Xcode command line tools
-```
+These package will vary by name depending on your chosen linux distro. Debian
+and Ubuntu users can install these with:
 
-**Windows**:
-
-```
-MinGW-w64 (or other compiler)
+```shell
+apt-get install -y gcc libc6-dev libx11-dev xorg-dev libxtst-dev
 ```
 
-**Linux**:
+From there you run `make build`.
 
-```
-x11 dev headers
-xtst dev headers
-xorg dev headers
+### OSX
+
+OSX builds will require xcode and the xcode command line tools. These must be
+installed through the Apple store.
+
+Beyond xcode the build also requires installing support for gnu make if you want
+to use the Makefile for generating a build. Homebrew users can install this
+with:
+
+```shell
+brew install make coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt grep
+export PATH="$(brew --prefix)/opt/make/libexec/gnubin:${PATH}"
 ```
 
-With those dependencies installed you can then run `make build` from the
-root of the repository to generate a binary.
+From there you run `make build`.
+
+### Windows
+
+Windows builds require a GCC implementation. I recommend
+<https://jmeubank.github.io/tdm-gcc/>. During installation you will be given the
+option to add the GCC install to your path. If you choose not to then you will
+need to temporarily add it to your path in PowerShell with:
+
+```shell
+$env:Path += ";C:\TDM-GCC-64\bin\"
+```
+
+The included Makefile contains too many bash specific commands to work in
+PowerShell but you can still generate a binary by running:
+
+```shell
+go build main.go
+```
+
+#### Windows On Linux
+
+If you want to generate a windows build from a linux machine then you will need
+to install a MinGW implementation. Debian and Ubuntu users can do this with:
+
+```shell
+apt-get install -y gcc-multilib gcc-mingw-w64
+```
+
+The included Makefile does not have a build option for this but you can generate
+the binary with:
+
+```shell
+CC=x86_64-w64-mingw32-gcc GOOS=windows go build main.go
+```
 
 ## How It Works
 
@@ -237,8 +273,7 @@ device. This project needs to read data from a remote device.
 
 ## Future Features
 
-A lot of the low level device interfaces like `evdev` and `hid` are new to me
-and I'm still learning them. Getting solid OSX support is top of my list to
-complete. Support for multiple monitors would be next. After that, figuring out
-how to handle the tilt and pressure events in a way that enable full graphics
-tablet functionality on the host would be next.
+The current state of this project fulfills all of my needs so I'm not planning
+on adding anything new for myself. However, I'm open to helping and reviewing
+contributions if you want add a new feature or make an improvement. Open an
+issue with your idea if you want to talk about how it would best be added.
