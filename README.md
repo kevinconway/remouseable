@@ -74,6 +74,12 @@ the usual password flag when running the application.
 Note that windows builds cannot use this option due to incompatibilities with
 the current version of the windows ssh-agent.
 
+Note that if you encounter the `Invalid MIT-MAGIC-COOKIE-1 key` error
+it means that most likely the ssh fingerprint of the device might have
+changed, most likely due to an update of the OS.
+Follow the ssh suggestion of removing the outdated fingerprint then 
+if you are satisfied that your device is indeed the right one try connecting again.
+
 ### Wireless Tablet
 
 The default expectation is that you will have your tablet connected over USB
