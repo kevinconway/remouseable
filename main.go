@@ -45,6 +45,7 @@ func main() {
 	sshPassword := fs.String("ssh-password", "", "An optional password to use when ssh-ing into the tablet. Use - for a prompt rather than entering a value. If not given then public/private keypair authentication is used.")
 	sshSocket := fs.String("ssh-socket", os.Getenv("SSH_AUTH_SOCK"), "Path to the SSH auth socket. This must not be empty if using public/private keypair authentication.")
 	evtFile := fs.String("event-file", "/dev/input/event0", "The path on the tablet from which to read evdev events. Probably don't change this.")
+	debugEvents := fs.Bool("debug-events", false, "Stream hardware events from the tablet instead of acting as a mouse. This is for debugging.")
 	_ = fs.Parse(os.Args[1:])
 
 	if *sshPassword == "-" {
@@ -97,6 +98,26 @@ func main() {
 	}
 	if err = sesh.Start(fmt.Sprintf("cat %s", *evtFile)); err != nil {
 		panic(err)
+	}
+	if *debugEvents {
+		it := &remouseable.SelectingEvdevIterator{
+			Wrapped: &remouseable.FileEvdevIterator{
+				Source: ioutil.NopCloser(pipe),
+			},
+			Selection: []uint16{remouseable.EV_ABS},
+		}
+		defer it.Close()
+		for it.Next() {
+			evt := it.Current()
+			evtype := remouseable.EVMap[evt.Type]
+			evcode := remouseable.CodeString(evt.Type, evt.Code)
+			fmt.Printf(
+				`{"eventType": %d, "eventTypeName": "%s", "eventCode": %d, "eventCodeName": "%s"}`,
+				evt.Type, evtype, evt.Code, evcode,
+			)
+			fmt.Print("\n")
+		}
+		return
 	}
 
 	it := &remouseable.SelectingEvdevIterator{
