@@ -112,8 +112,8 @@ func main() {
 			evtype := remouseable.EVMap[evt.Type]
 			evcode := remouseable.CodeString(evt.Type, evt.Code)
 			fmt.Printf(
-				`{"eventType": %d, "eventTypeName": "%s", "eventCode": %d, "eventCodeName": "%s"}`,
-				evt.Type, evtype, evt.Code, evcode,
+				`{"eventType": %d, "eventTypeName": "%s", "eventCode": %d, "eventCodeName": "%s", "eventValue": %d}`,
+				evt.Type, evtype, evt.Code, evcode, evt.Value,
 			)
 			fmt.Print("\n")
 		}
