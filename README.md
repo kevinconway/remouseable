@@ -96,6 +96,24 @@ override the default IP address when running the application:
 remouseable --ssh-ip="192.168.1.110" # or other IP
 ```
 
+### OSX Privacy Settings
+
+If you are using this on an Apple or OSX device then you will need to give the
+terminal or shell you are using permissions to control your mouse. Mouse
+permissions are treated as an accessibility feature. If you are not prompted by
+the operating system to update your permissions the first time you run the
+application then you can navigate to
+`System Preferences -> Security & Privacy -> Privacy -> Accessibility`. You will
+see your terminal or shell in the list of applications that have requested
+accessibility permissions.
+
+### reMarkable 2 Tablets
+
+The application should work with both reMarkable and reMarkable 2 tablets.
+However, the reMarkable 2 requires that you add
+`--event-file /dev/input/event1` when executing because of a slight change in
+where the stylus events are written in the new tablets.
+
 ### All Options
 
 ```
