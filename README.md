@@ -23,7 +23,10 @@ the project. To view the code API documentation check out the
 
 Most settings default to the correct values. The only value you should need to
 set in the common case is the SSH password for the tablet. This password value
-is found in the `About` tab of the tablet menu at the bottom of the `General
+is found in the settings menu under `Help` and then `Copyrights and licenses`.
+Your password will be near the bottom of the page. If you have an older tablet
+that has not been updated to the latest software then your password may be
+found in the `About` tab of the tablet menu at the bottom of the `General
 Information` section. You may either give the password as text with
 
 ```bash
@@ -44,7 +47,7 @@ tablet surface with the stylus the computer mouse will click and hold down the
 left mouse button while you write or draw and then release the button when you
 lift the stylus.
 
-### Easier SSH Setup
+### Advanced SSH Setup
 
 By default, the tablet only accepts the root password for authentication. It is
 possible, though, to install a custom public key on the device so that you can
@@ -55,9 +58,9 @@ If you'd like to create a key pair especially for accessing the reMarkable
 tablet then start with a guide like
 <https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>
 that walks through creating a new key pair and registering it with your SSH
-agent. For advanced SSH users, such as those using the gpg-agent as the SSH
-agent, the reMouse application will talk to any valid SSH agent implementation
-so long as the `SSH_AUTH_SOCK` value is set correctly.
+agent. For even more advanced SSH users, such as those using the gpg-agent as
+the SSH agent, the remouseable application will talk to any valid SSH agent
+implementation so long as the `SSH_AUTH_SOCK` value is set correctly.
 
 Once you have a key pair ready, copy the public key value from `ssh-add -L` for
 the key you want to use. Then copy the key over to your tablet with:
@@ -74,11 +77,11 @@ the usual password flag when running the application.
 Note that windows builds cannot use this option due to incompatibilities with
 the current version of the windows ssh-agent.
 
-Note that if you encounter the `Invalid MIT-MAGIC-COOKIE-1 key` error
-it means that most likely the ssh fingerprint of the device might have
-changed, most likely due to an update of the OS.
-Follow the ssh suggestion of removing the outdated fingerprint then 
-if you are satisfied that your device is indeed the right one try connecting again.
+Note that if you encounter the `Invalid MIT-MAGIC-COOKIE-1 key` error it means
+that most likely the ssh fingerprint of the device might have changed to an
+update of the tablet OS. Follow the ssh suggestion of removing the outdated
+fingerprint then if you are satisfied that your device is indeed the right one
+try connecting again.
 
 ### Wireless Tablet
 
@@ -119,13 +122,14 @@ where the stylus events are written in the new tablets.
 ```
 $ remouseable -h
 Usage of remouseable:
+      --debug-events          Stream hardware events from the tablet instead of acting as a mouse. This is for debugging.
       --event-file string     The path on the tablet from which to read evdev events. Probably don't change this. (default "/dev/input/event0")
       --orientation string    Orientation of the tablet. Choices are vertical, right, and left (default "right")
       --screen-height int     The max units per millimeter of the host screen height. Probably don't change this. (default 1080)
       --screen-width int      The max units per millimeter of the host screen width. Probably don't change this. (default 1920)
       --ssh-ip string         The host and port of a tablet. (default "10.11.99.1:22")
       --ssh-password string   An optional password to use when ssh-ing into the tablet. Use - for a prompt rather than entering a value. If not given then public/private keypair authentication is used.
-      --ssh-socket string     Path to the SSH auth socket. This must not be empty if using public/private keypair authentication. (default "/run/user/1000/gnupg/S.gpg-agent.ssh")
+      --ssh-socket string     Path to the SSH auth socket. This must not be empty if using public/private keypair authentication.
       --ssh-user string       The ssh username to use when logging into the tablet. (default "root")
       --tablet-height int     The max units per millimeter for the hight of the tablet. Probably don't change this. (default 15725)
       --tablet-width int      The max units per millimeter for the width of the tablet. Probably don't change this. (default 20967)
@@ -135,7 +139,7 @@ exit status 2
 
 ## Building
 
-There are pre-build binaries attached to each release that should work for all
+There are pre-built binaries attached to each release that should work for all
 64bit versions of linux, osx, and windows. However, if you prefer to generate
 your own build then the following sections detail building a binary on
 different platforms.

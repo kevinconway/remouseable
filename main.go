@@ -107,6 +107,7 @@ func main() {
 			Selection: []uint16{remouseable.EV_ABS},
 		}
 		defer it.Close()
+		fmt.Println("remouseable connected and running.")
 		for it.Next() {
 			evt := it.Current()
 			evtype := remouseable.EVMap[evt.Type]
@@ -116,6 +117,9 @@ func main() {
 				evt.Type, evtype, evt.Code, evcode, evt.Value,
 			)
 			fmt.Print("\n")
+		}
+		if err = it.Close(); err != nil {
+			panic(err.Error())
 		}
 		return
 	}
