@@ -20,6 +20,7 @@ import (
 	"net"
 	"os"
 	"syscall"
+	"time"
 
 	flag "github.com/spf13/pflag"
 	"golang.org/x/crypto/ssh"
@@ -46,6 +47,8 @@ func main() {
 	sshSocket := fs.String("ssh-socket", os.Getenv("SSH_AUTH_SOCK"), "Path to the SSH auth socket. This must not be empty if using public/private keypair authentication.")
 	evtFile := fs.String("event-file", "/dev/input/event0", "The path on the tablet from which to read evdev events. Probably don't change this.")
 	debugEvents := fs.Bool("debug-events", false, "Stream hardware events from the tablet instead of acting as a mouse. This is for debugging.")
+	osxDrag := fs.Bool("osx-drag-enabled", false, "Enable the special OSX drag event. Turn this on if your OSX application is not drawing correctly.")
+	rateLimit := fs.Duration("rate-limit-events", time.Duration(0), "Throttle mouse events. This can improve performance when OSX drag is enabled.")
 	_ = fs.Parse(os.Args[1:])
 
 	if *sshPassword == "-" {
@@ -132,9 +135,20 @@ func main() {
 	}
 	defer it.Close()
 
-	sm := &remouseable.EvdevStateMachine{
+	var sm remouseable.StateMachine = &remouseable.EvdevStateMachine{
 		Iterator:          it,
 		PressureThreshold: 1000,
+	}
+	if *osxDrag {
+		sm = &remouseable.DraggingEvdevStateMachine{
+			EvdevStateMachine: &remouseable.EvdevStateMachine{
+				Iterator:          it,
+				PressureThreshold: 1000,
+			},
+		}
+	}
+	if *rateLimit > time.Duration(0) {
+		sm = remouseable.NewRateLimitStateMachine(*rateLimit, sm)
 	}
 	defer sm.Close()
 
