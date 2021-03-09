@@ -45,6 +45,9 @@ func main() {
 	sshPassword := fs.String("ssh-password", "", "An optional password to use when ssh-ing into the tablet. Use - for a prompt rather than entering a value. If not given then public/private keypair authentication is used.")
 	sshSocket := fs.String("ssh-socket", os.Getenv("SSH_AUTH_SOCK"), "Path to the SSH auth socket. This must not be empty if using public/private keypair authentication.")
 	evtFile := fs.String("event-file", "/dev/input/event0", "The path on the tablet from which to read evdev events. Probably don't change this.")
+	debugEvents := fs.Bool("debug-events", false, "Stream hardware events from the tablet instead of acting as a mouse. This is for debugging.")
+	disableDrag := fs.Bool("disable-drag-event", false, "Disable use of the custom OSX drag event. Only use this drawing on an Apple device is not working as expected.")
+	pressureThreshold := fs.Int("pressure-threshold", 1000, "Change the click detection sensitivity. 1000 is when the pen makes contact with the tablet. Set higher to require more pen pressure for a click.")
 	_ = fs.Parse(os.Args[1:])
 
 	if *sshPassword == "-" {
@@ -98,6 +101,30 @@ func main() {
 	if err = sesh.Start(fmt.Sprintf("cat %s", *evtFile)); err != nil {
 		panic(err)
 	}
+	if *debugEvents {
+		it := &remouseable.SelectingEvdevIterator{
+			Wrapped: &remouseable.FileEvdevIterator{
+				Source: ioutil.NopCloser(pipe),
+			},
+			Selection: []uint16{remouseable.EV_ABS},
+		}
+		defer it.Close()
+		fmt.Println("remouseable connected and running.")
+		for it.Next() {
+			evt := it.Current()
+			evtype := remouseable.EVMap[evt.Type]
+			evcode := remouseable.CodeString(evt.Type, evt.Code)
+			fmt.Printf(
+				`{"eventType": %d, "eventTypeName": "%s", "eventCode": %d, "eventCodeName": "%s", "eventValue": %d}`,
+				evt.Type, evtype, evt.Code, evcode, evt.Value,
+			)
+			fmt.Print("\n")
+		}
+		if err = it.Close(); err != nil {
+			panic(err.Error())
+		}
+		return
+	}
 
 	it := &remouseable.SelectingEvdevIterator{
 		Wrapped: &remouseable.FileEvdevIterator{
@@ -107,9 +134,17 @@ func main() {
 	}
 	defer it.Close()
 
-	sm := &remouseable.EvdevStateMachine{
-		Iterator:          it,
-		PressureThreshold: 1000,
+	var sm remouseable.StateMachine = &remouseable.DraggingEvdevStateMachine{
+		EvdevStateMachine: &remouseable.EvdevStateMachine{
+			Iterator:          it,
+			PressureThreshold: *pressureThreshold,
+		},
+	}
+	if *disableDrag {
+		sm = &remouseable.EvdevStateMachine{
+			Iterator:          it,
+			PressureThreshold: *pressureThreshold,
+		}
 	}
 	defer sm.Close()
 

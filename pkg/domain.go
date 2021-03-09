@@ -52,6 +52,8 @@ type EvdevIterator interface {
 const (
 	// StateChangeMove represents a move of the x and y for the mouse.
 	ChangeTypeMove = "MOVE"
+	// StateChangeDrag represents a move of the x and y for the mouse when clicked.
+	ChangeTypeDrag = "DRAG"
 	// ChangeTypeClick indicates that the stylus is touching the tablet.
 	ChangeTypeClick = "CLICK"
 	// ChangeTypeUnclick indicates the stylus is no longer touching the tablet.
@@ -67,6 +69,17 @@ type StateChangeMove struct {
 // Type returns the specific change type.
 func (*StateChangeMove) Type() string {
 	return ChangeTypeMove
+}
+
+// StateChangeDrag contains mouse movement data when clicked.
+type StateChangeDrag struct {
+	X int
+	Y int
+}
+
+// Type returns the specific change type.
+func (*StateChangeDrag) Type() string {
+	return ChangeTypeDrag
 }
 
 // StateChangeClick contains mouse click data.
@@ -116,6 +129,7 @@ type PositionScaler interface {
 // Driver is used to control a host system.
 type Driver interface {
 	MoveMouse(x int, y int) error
+	DragMouse(x int, y int) error
 	Click() error
 	Unclick() error
 	GetSize() (width int, height int, err error)

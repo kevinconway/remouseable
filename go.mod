@@ -1,6 +1,6 @@
 module github.com/kevinconway/remouseable
 
-go 1.13
+go 1.16
 
 require (
 	github.com/dave/jennifer v1.3.0
@@ -8,6 +8,7 @@ require (
 	github.com/golang/mock v1.3.1
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.4.0
-	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550
-	golang.org/x/sys v0.0.0-20191018095205-727590c5006e
+	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83
+	golang.org/x/sys v0.0.0-20210309074719-68d13333faf2
+	golang.org/x/term v0.0.0-20210220032956-6a3ed077a48d // indirect
 )

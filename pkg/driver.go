@@ -44,3 +44,11 @@ func (*RobotgoDriver) MoveMouse(x int, y int) error {
 	robotgo.MoveMouse(x, y)
 	return nil
 }
+
+// DragMouse sets the mouse to a specified location while dragging a screen element.
+func (*RobotgoDriver) DragMouse(x int, y int) error {
+	// Reversing the x/y due to robotgo seemingly having an opposite
+	// x/y concept as the typical event source of evdev, etc.
+	robotgo.DragMouse(x, y)
+	return nil
+}

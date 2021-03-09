@@ -43,6 +43,13 @@ func (r *Runtime) Next() bool {
 			return false
 		}
 		return true
+	case ChangeTypeDrag:
+		evt := change.(*StateChangeDrag)
+		if err := r.Driver.DragMouse(r.PositionScaler.ScalePosition(evt.X, evt.Y)); err != nil {
+			r.err = err
+			return false
+		}
+		return true
 	case ChangeTypeClick:
 		if err := r.Driver.Click(); err != nil {
 			r.err = err

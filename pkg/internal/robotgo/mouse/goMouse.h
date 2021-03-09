@@ -28,7 +28,6 @@ int drag_mouse(int32_t x, int32_t y, MMMouseButton button)
 	MMPointInt32 point;
 	point = MMPointInt32Make(x, y);
 	dragMouse(point, button);
-	microsleep(mouseDelay);
 
 	return 0;
 }

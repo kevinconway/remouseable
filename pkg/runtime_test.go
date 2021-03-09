@@ -111,6 +111,34 @@ func TestRuntimeHandlesMove(t *testing.T) {
 	require.NotNil(t, rt.Close())
 }
 
+func TestRuntimeHandlesDrag(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	d := NewMockDriver(ctrl)
+	p := NewMockPositionScaler(ctrl)
+	s := NewMockStateMachine(ctrl)
+	rt := &Runtime{
+		Driver:         d,
+		PositionScaler: p,
+		StateMachine:   s,
+	}
+	evt := &StateChangeDrag{X: 1, Y: 2}
+	s.EXPECT().Next().Return(true)
+	s.EXPECT().Current().Return(evt)
+	p.EXPECT().ScalePosition(evt.X, evt.Y).Return(2, 3)
+	d.EXPECT().DragMouse(2, 3).Return(nil)
+	s.EXPECT().Next().Return(true)
+	s.EXPECT().Current().Return(evt)
+	p.EXPECT().ScalePosition(evt.X, evt.Y).Return(2, 3)
+	d.EXPECT().DragMouse(2, 3).Return(fmt.Errorf("drag failed"))
+	s.EXPECT().Close().Return(nil)
+
+	require.True(t, rt.Next())
+	require.False(t, rt.Next())
+	require.NotNil(t, rt.Close())
+}
+
 func TestRuntimeHandlesClick(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()

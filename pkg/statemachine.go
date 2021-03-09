@@ -81,3 +81,35 @@ func (it *EvdevStateMachine) Current() StateChange {
 func (it *EvdevStateMachine) Close() error {
 	return it.Iterator.Close()
 }
+
+type DraggingEvdevStateMachine struct {
+	*EvdevStateMachine
+}
+
+// next pushes the state machine one step. The return value is whether or not
+// a new state was achieved in the step.
+func (it *DraggingEvdevStateMachine) next(raw EvdevEvent) bool {
+	if ok := it.EvdevStateMachine.next(raw); !ok {
+		return false
+	}
+	switch ev := it.current.(type) {
+	case *StateChangeMove:
+		if it.clicked {
+			it.current = &StateChangeDrag{X: ev.X, Y: ev.Y}
+		}
+	default:
+		break
+	}
+	return true
+}
+
+// Next consumes from the raw event iterator until a new state is achieved.
+func (it *DraggingEvdevStateMachine) Next() bool {
+	for it.Iterator.Next() {
+		raw := it.Iterator.Current()
+		if it.next(raw) {
+			return true
+		}
+	}
+	return false
+}
