@@ -10,30 +10,30 @@ import (
 	gomock "github.com/golang/mock/gomock"
 )
 
-// MockDriver is a mock of Driver interface
+// MockDriver is a mock of Driver interface.
 type MockDriver struct {
 	ctrl     *gomock.Controller
 	recorder *MockDriverMockRecorder
 }
 
-// MockDriverMockRecorder is the mock recorder for MockDriver
+// MockDriverMockRecorder is the mock recorder for MockDriver.
 type MockDriverMockRecorder struct {
 	mock *MockDriver
 }
 
-// NewMockDriver creates a new mock instance
+// NewMockDriver creates a new mock instance.
 func NewMockDriver(ctrl *gomock.Controller) *MockDriver {
 	mock := &MockDriver{ctrl: ctrl}
 	mock.recorder = &MockDriverMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use
+// EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockDriver) EXPECT() *MockDriverMockRecorder {
 	return m.recorder
 }
 
-// Click mocks base method
+// Click mocks base method.
 func (m *MockDriver) Click() error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Click")
@@ -41,13 +41,27 @@ func (m *MockDriver) Click() error {
 	return ret0
 }
 
-// Click indicates an expected call of Click
+// Click indicates an expected call of Click.
 func (mr *MockDriverMockRecorder) Click() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Click", reflect.TypeOf((*MockDriver)(nil).Click))
 }
 
-// GetSize mocks base method
+// DragMouse mocks base method.
+func (m *MockDriver) DragMouse(arg0, arg1 int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DragMouse", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DragMouse indicates an expected call of DragMouse.
+func (mr *MockDriverMockRecorder) DragMouse(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DragMouse", reflect.TypeOf((*MockDriver)(nil).DragMouse), arg0, arg1)
+}
+
+// GetSize mocks base method.
 func (m *MockDriver) GetSize() (int, int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSize")
@@ -57,13 +71,13 @@ func (m *MockDriver) GetSize() (int, int, error) {
 	return ret0, ret1, ret2
 }
 
-// GetSize indicates an expected call of GetSize
+// GetSize indicates an expected call of GetSize.
 func (mr *MockDriverMockRecorder) GetSize() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSize", reflect.TypeOf((*MockDriver)(nil).GetSize))
 }
 
-// MoveMouse mocks base method
+// MoveMouse mocks base method.
 func (m *MockDriver) MoveMouse(arg0, arg1 int) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "MoveMouse", arg0, arg1)
@@ -71,13 +85,13 @@ func (m *MockDriver) MoveMouse(arg0, arg1 int) error {
 	return ret0
 }
 
-// MoveMouse indicates an expected call of MoveMouse
+// MoveMouse indicates an expected call of MoveMouse.
 func (mr *MockDriverMockRecorder) MoveMouse(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MoveMouse", reflect.TypeOf((*MockDriver)(nil).MoveMouse), arg0, arg1)
 }
 
-// Unclick mocks base method
+// Unclick mocks base method.
 func (m *MockDriver) Unclick() error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Unclick")
@@ -85,7 +99,7 @@ func (m *MockDriver) Unclick() error {
 	return ret0
 }
 
-// Unclick indicates an expected call of Unclick
+// Unclick indicates an expected call of Unclick.
 func (mr *MockDriverMockRecorder) Unclick() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Unclick", reflect.TypeOf((*MockDriver)(nil).Unclick))

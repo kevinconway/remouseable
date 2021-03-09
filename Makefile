@@ -123,7 +123,7 @@ generate: $(BINDIR)
 	GO111MODULE=on \
 	GOFLAGS="$(GOFLAGS)" \
 	PATH="${PATH}:$(BINDIR)" \
-	go generate github.com/kevinconway/remouse/pkg github.com/kevinconway/remouse/pkg/internal
+	go generate github.com/kevinconway/remouseable/pkg github.com/kevinconway/remouseable/pkg/internal
 	$(MAKE) fmt
 
 coverage: $(BINDIR) $(COVERDIR) $(COVERCOMBINED) $(COVERINTERCHANGE) $(COVERHTML) $(COVERXML)

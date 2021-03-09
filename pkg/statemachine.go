@@ -14,8 +14,6 @@
 
 package remouseable
 
-import "time"
-
 // EvdevStateMachine converts and EvdevIterator into significant state events.
 type EvdevStateMachine struct {
 	Iterator          EvdevIterator
@@ -114,62 +112,4 @@ func (it *DraggingEvdevStateMachine) Next() bool {
 		}
 	}
 	return false
-}
-
-type RateLimitStateMachine struct {
-	Wrapped StateMachine
-	Rate    time.Duration
-	current StateChange
-	last    time.Time
-	now     func() time.Time
-}
-
-func NewRateLimitStateMachine(rate time.Duration, sm StateMachine) *RateLimitStateMachine {
-	return &RateLimitStateMachine{
-		Wrapped: sm,
-		Rate:    rate,
-		now:     time.Now,
-	}
-}
-
-// Next progresses the iterator. It returns false when there are no more
-// elements to iterate or when the iterator encountered an error.
-func (m *RateLimitStateMachine) Next() bool {
-	for {
-		if ok := m.Wrapped.Next(); !ok {
-			return false
-		}
-		now := time.Now()
-		next := m.Wrapped.Current()
-		if m.current == nil {
-			m.last = now
-			m.current = next
-			return true
-		}
-		if next.Type() != m.current.Type() {
-			time.Sleep(now.Sub(m.last))
-			m.last = time.Now()
-			m.current = next
-			return true
-		}
-		if now.Sub(m.last) > m.Rate {
-			m.last = now
-			m.current = next
-			return true
-		}
-	}
-}
-
-// Current returns the active element of the iterator. This should only be
-// called if Next() returned a true.
-func (m *RateLimitStateMachine) Current() StateChange {
-	return m.current
-}
-
-// Close must be called before discarding the iterator. If the iterator
-// exited cleanly then the error is nil. The error is non-nil if either the
-// iterator encountered an internal error and stopped early or if it failed
-// to close.
-func (m *RateLimitStateMachine) Close() error {
-	return m.Wrapped.Close()
 }

@@ -20,7 +20,6 @@ import (
 	"net"
 	"os"
 	"syscall"
-	"time"
 
 	flag "github.com/spf13/pflag"
 	"golang.org/x/crypto/ssh"
@@ -47,8 +46,8 @@ func main() {
 	sshSocket := fs.String("ssh-socket", os.Getenv("SSH_AUTH_SOCK"), "Path to the SSH auth socket. This must not be empty if using public/private keypair authentication.")
 	evtFile := fs.String("event-file", "/dev/input/event0", "The path on the tablet from which to read evdev events. Probably don't change this.")
 	debugEvents := fs.Bool("debug-events", false, "Stream hardware events from the tablet instead of acting as a mouse. This is for debugging.")
-	osxDrag := fs.Bool("osx-drag-enabled", false, "Enable the special OSX drag event. Turn this on if your OSX application is not drawing correctly.")
-	rateLimit := fs.Duration("rate-limit-events", time.Duration(0), "Throttle mouse events. This can improve performance when OSX drag is enabled.")
+	disableDrag := fs.Bool("disable-drag-event", false, "Disable use of the custom OSX drag event. Only use this drawing on an Apple device is not working as expected.")
+	pressureThreshold := fs.Int("pressure-threshold", 1000, "Change the click detection sensitivity. 1000 is when the pen makes contact with the tablet. Set higher to require more pen pressure for a click.")
 	_ = fs.Parse(os.Args[1:])
 
 	if *sshPassword == "-" {
@@ -135,20 +134,17 @@ func main() {
 	}
 	defer it.Close()
 
-	var sm remouseable.StateMachine = &remouseable.EvdevStateMachine{
-		Iterator:          it,
-		PressureThreshold: 1000,
+	var sm remouseable.StateMachine = &remouseable.DraggingEvdevStateMachine{
+		EvdevStateMachine: &remouseable.EvdevStateMachine{
+			Iterator:          it,
+			PressureThreshold: *pressureThreshold,
+		},
 	}
-	if *osxDrag {
-		sm = &remouseable.DraggingEvdevStateMachine{
-			EvdevStateMachine: &remouseable.EvdevStateMachine{
-				Iterator:          it,
-				PressureThreshold: 1000,
-			},
+	if *disableDrag {
+		sm = &remouseable.EvdevStateMachine{
+			Iterator:          it,
+			PressureThreshold: *pressureThreshold,
 		}
-	}
-	if *rateLimit > time.Duration(0) {
-		sm = remouseable.NewRateLimitStateMachine(*rateLimit, sm)
 	}
 	defer sm.Close()
 
