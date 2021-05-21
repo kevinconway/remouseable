@@ -2,6 +2,32 @@
 
 > Use your reMarkable tablet as a mouse.
 
+- [reMouseable](#remouseable)
+  - [Overview](#overview)
+  - [Code Documentation](#code-documentation)
+  - [Installation](#installation)
+    - [Windows](#windows)
+    - [OSX](#osx)
+    - [Linux](#linux)
+  - [Usage](#usage)
+    - [reMarkable 2 Tablets](#remarkable-2-tablets)
+    - [Wireless Tablet](#wireless-tablet)
+    - [Advanced SSH Setup](#advanced-ssh-setup)
+    - [All Options](#all-options)
+  - [Common Issues And Solutions](#common-issues-and-solutions)
+    - [OSX Privacy Settings](#osx-privacy-settings)
+    - [Getting "panic: dial unix: missing address" On Windows](#getting-panic-dial-unix-missing-address-on-windows)
+  - [Building](#building)
+    - [Linux](#linux-1)
+    - [OSX](#osx-1)
+    - [Windows](#windows-1)
+      - [Windows On Linux](#windows-on-linux)
+  - [How It Works](#how-it-works)
+  - [License](#license)
+  - [Developing](#developing)
+  - [Thanks](#thanks)
+  - [Future Features](#future-features)
+
 ## Overview
 
 I'm a user of the [reMarkable](https://remarkable.com/) tablet. After using it
@@ -18,6 +44,67 @@ specific language to be installed on the host machine.
 This README contains how-to information for installing, configuration, and using
 the project. To view the code API documentation check out the
 [godocs](https://godoc.org/github.com/kevinconway/remouseable).
+
+## Installation
+
+### Windows
+
+Go to <https://github.com/kevinconway/remouseable/releases/latest> and download
+the file named `windows.exe`. Then rename the file to `remouseable.exe`. You
+can now open the Windows command prompt and start the program with:
+
+```shell
+cd Downloads
+remouseable.exe
+```
+
+If a new version of the program comes out then you can overwrite your
+`remouseable.exe` with a new version using exactly the same steps.
+
+### OSX
+
+Go to <https://github.com/kevinconway/remouseable/releases/latest> and download
+the file named `osx`. Then rename the file to `remouseable`. Next, make the
+program runnable with by opening a command line prompt and:
+
+```shell
+cd ~/Downloads
+chmod +x remouseable
+```
+
+You can now run the program by opening a command line prompt and:
+
+```shell
+cd ~/Downloads
+./remouseable
+```
+
+Note that the first time you run the application your system will prompt you
+with a security notice. The remouseable application works by controlling your
+mouse and OSX does not allow this by default. To enable the application you
+must grant your command line prompt accessibility settings which allow it to
+move the mouse. To do this, navigate to
+`System Preferences -> Security & Privacy -> Privacy -> Accessibility`. You will
+see your terminal or shell in the list of applications that have requested
+accessibility permissions.
+
+### Linux
+
+Go to <https://github.com/kevinconway/remouseable/releases/latest> and download
+the file named `linux`. Then rename the file to `remouseable`. Next, make the
+program runnable with by opening a command line prompt and:
+
+```shell
+cd ~/Downloads
+chmod +x remouseable
+```
+
+You can now run the program by opening a command line prompt and:
+
+```shell
+cd ~/Downloads
+./remouseable
+```
 
 ## Usage
 
@@ -46,17 +133,6 @@ the writing surface but without directly touching the tablet. Once you touch the
 tablet surface with the stylus the computer mouse will click and hold down the
 left mouse button while you write or draw and then release the button when you
 lift the stylus.
-
-### OSX Privacy Settings
-
-If you are using this on an Apple or OSX device then you will need to give the
-terminal or shell you are using permissions to control your mouse. Mouse
-permissions are treated as an accessibility feature. If you are not prompted by
-the operating system to update your permissions the first time you run the
-application then you can navigate to
-`System Preferences -> Security & Privacy -> Privacy -> Accessibility`. You will
-see your terminal or shell in the list of applications that have requested
-accessibility permissions.
 
 ### reMarkable 2 Tablets
 
@@ -140,6 +216,26 @@ Usage of remouseable:
 pflag: help requested
 exit status 2
 ```
+
+## Common Issues And Solutions
+
+### OSX Privacy Settings
+
+If you are using this on an Apple or OSX device then you will need to give the
+terminal or shell you are using permissions to control your mouse. Mouse
+permissions are treated as an accessibility feature. If you are not prompted by
+the operating system to update your permissions the first time you run the
+application then you can navigate to
+`System Preferences -> Security & Privacy -> Privacy -> Accessibility`. You will
+see your terminal or shell in the list of applications that have requested
+accessibility permissions.
+
+### Getting "panic: dial unix: missing address" On Windows
+
+This error message happens most often when the `--ssh-password` flag is missing
+when running the application. On Windows, you must run the application with
+either `remouseable.exe --ssh-password="MYPASSWORD"` or
+`remouseable.exe --ssh-password="-"`.
 
 ## Building
 
