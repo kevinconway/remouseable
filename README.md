@@ -192,7 +192,7 @@ fingerprint then if you are satisfied that your device is indeed the right one
 try connecting again.
 
 ```bash
-remouseable --ssh-ip="192.168.1.110" # or other IP
+remouseable --ssh-ip="192.168.1.110:22" # or other IP
 ```
 
 ### All Options
