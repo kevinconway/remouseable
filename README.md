@@ -88,6 +88,11 @@ move the mouse. To do this, navigate to
 see your terminal or shell in the list of applications that have requested
 accessibility permissions.
 
+If you'd like to be able to launch the application through spotlight instead of
+only the terminal then check out <https://github.com/isaacwisdom/reMouseableApp>
+where another developer has created an Applscript wrapper that makes remouseable
+act more like a typical OSX application.
+
 ### Linux
 
 Go to <https://github.com/kevinconway/remouseable/releases/latest> and download
