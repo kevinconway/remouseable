@@ -26,14 +26,22 @@ func (*RobotgoDriver) GetSize() (int, int, error) {
 }
 
 // Click and hold the mouse button down.
-func (*RobotgoDriver) Click() error {
-	robotgo.MouseToggle("down", "left")
+func (*RobotgoDriver) Click(eraser bool) error {
+	if eraser{
+		robotgo.MouseToggle("down", "right")
+	}else{
+		robotgo.MouseToggle("down", "left")
+	}
 	return nil
 }
 
 // Unclick and release the mouse button.
-func (*RobotgoDriver) Unclick() error {
-	robotgo.MouseToggle("up", "left")
+func (*RobotgoDriver) Unclick(eraser bool) error {
+	if eraser{
+		robotgo.MouseToggle("up", "right")
+	}else{
+		robotgo.MouseToggle("up", "left")
+	}
 	return nil
 }
 

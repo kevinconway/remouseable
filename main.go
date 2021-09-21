@@ -102,11 +102,8 @@ func main() {
 		panic(err)
 	}
 	if *debugEvents {
-		it := &remouseable.SelectingEvdevIterator{
-			Wrapped: &remouseable.FileEvdevIterator{
-				Source: ioutil.NopCloser(pipe),
-			},
-			Selection: []uint16{remouseable.EV_ABS},
+		it := &remouseable.FileEvdevIterator{
+			Source: ioutil.NopCloser(pipe),
 		}
 		defer it.Close()
 		fmt.Println("remouseable connected and running.")
@@ -130,7 +127,7 @@ func main() {
 		Wrapped: &remouseable.FileEvdevIterator{
 			Source: ioutil.NopCloser(pipe),
 		},
-		Selection: []uint16{remouseable.EV_ABS},
+		Selection: []uint16{remouseable.EV_ABS, remouseable.EV_KEY},
 	}
 	defer it.Close()
 

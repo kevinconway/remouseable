@@ -113,6 +113,8 @@ type StateMachine interface {
 	// Current returns the active element of the iterator. This should only be
 	// called if Next() returned a true.
 	Current() StateChange
+	// Eraser returns true if the last actions were used with a eraser, otherwise false for pen
+	Eraser() bool
 	// Close must be called before discarding the iterator. If the iterator
 	// exited cleanly then the error is nil. The error is non-nil if either the
 	// iterator encountered an internal error and stopped early or if it failed
@@ -130,7 +132,7 @@ type PositionScaler interface {
 type Driver interface {
 	MoveMouse(x int, y int) error
 	DragMouse(x int, y int) error
-	Click() error
-	Unclick() error
+	Click(eraser bool) error
+	Unclick(eraser bool) error
 	GetSize() (width int, height int, err error)
 }

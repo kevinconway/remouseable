@@ -23,12 +23,20 @@ type EvdevStateMachine struct {
 	y                 int
 	yChanged          bool
 	clicked           bool
+	eraser            bool
 	current           StateChange
 }
 
 // next pushes the state machine one step. The return value is whether or not
 // a new state was achieved in the step.
 func (it *EvdevStateMachine) next(raw EvdevEvent) bool {
+	if raw.Type == EV_KEY{
+		if raw.Code == 321{
+			it.eraser = true
+		}else if raw.Code == 320{
+			it.eraser = false
+		}
+	}
 	if raw.Type != EV_ABS {
 		return false
 	}
@@ -75,6 +83,11 @@ func (it *EvdevStateMachine) Next() bool {
 // Current returns the iterator value.
 func (it *EvdevStateMachine) Current() StateChange {
 	return it.current
+}
+
+// Returns if eraser
+func (it *EvdevStateMachine) Eraser() bool {
+	return it.eraser
 }
 
 // Close the underlying source and return any errors.
