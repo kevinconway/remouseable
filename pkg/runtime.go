@@ -35,9 +35,9 @@ func (r *Runtime) Next() bool {
 		return false
 	}
 	change := r.StateMachine.Current()
-	key := "left"
+	key := r.StateMachine.GetPenFunc()
 	if r.StateMachine.Eraser() {
-		key = "right"
+		key = r.StateMachine.GetEraserFunc()
 	}
 	switch change.Type() {
 	case ChangeTypeMove:

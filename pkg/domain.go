@@ -120,6 +120,10 @@ type StateMachine interface {
 	// iterator encountered an internal error and stopped early or if it failed
 	// to close.
 	Close() error
+	// PenFunc return desired pen function ("left","right","center")
+	GetPenFunc() string
+	// EraserFunc return desired eraser function ("left","right","center")
+	GetEraserFunc() string
 }
 
 // PositionScaler implements scaling rules for converting x/y coordinates

@@ -35,6 +35,8 @@ func main() {
 
 	fs := flag.NewFlagSet("remouseable", flag.ExitOnError)
 	orientation := fs.String("orientation", "right", "Orientation of the tablet. Choices are vertical, right, and left")
+	pen := fs.String("pen", "left", "Pen side mouse function. Choices are left, right, and center")
+	eraser := fs.String("eraser", "right", "Eraser side mouse function. Choices are left, right, and center")
 	tabletHeight := fs.Int("tablet-height", remouseable.DefaultTabletHeight, "The max units per millimeter for the hight of the tablet. Probably don't change this.")
 	tabletWidth := fs.Int("tablet-width", remouseable.DefaultTabletWidth, "The max units per millimeter for the width of the tablet. Probably don't change this.")
 	tmpScreenWidth, tmpScreenHeight, _ := driver.GetSize()
@@ -131,16 +133,27 @@ func main() {
 	}
 	defer it.Close()
 
+	if !(*pen == "left" || *pen == "right" || *pen == "center") {
+		panic(fmt.Sprintf("unknown pen function %s", *pen))
+	}
+	if !(*eraser == "left" || *eraser == "right" || *eraser == "center") {
+		panic(fmt.Sprintf("unknown eraser function %s", *eraser))
+	}
+
 	var sm remouseable.StateMachine = &remouseable.DraggingEvdevStateMachine{
 		EvdevStateMachine: &remouseable.EvdevStateMachine{
 			Iterator:          it,
 			PressureThreshold: *pressureThreshold,
+			PenFunc:           *pen,
+			EraserFunc:        *eraser,
 		},
 	}
 	if *disableDrag {
 		sm = &remouseable.EvdevStateMachine{
 			Iterator:          it,
 			PressureThreshold: *pressureThreshold,
+			PenFunc:           *pen,
+			EraserFunc:        *eraser,
 		}
 	}
 	defer sm.Close()

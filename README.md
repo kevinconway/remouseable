@@ -209,6 +209,8 @@ Usage of remouseable:
       --disable-drag-event       Disable use of the custom OSX drag event. Only use this drawing on an Apple device is not working as expected.
       --event-file string        The path on the tablet from which to read evdev events. Probably don't change this. (default "/dev/input/event0")
       --orientation string       Orientation of the tablet. Choices are vertical, right, and left (default "right")
+	  --pen                      Pen side mouse function. Choices are left, right, and center (default "left")
+	  --eraser                   Eraser side mouse function. Choices are left, right, and center (default "right")
       --pressure-threshold int   Change the click detection sensitivity. 1000 is when the pen makes contact with the tablet. Set higher to require more pen pressure for a click. (default 1000)
       --screen-height int        The max units per millimeter of the host screen height. Probably don't change this. (default 1080)
       --screen-width int         The max units per millimeter of the host screen width. Probably don't change this. (default 1920)
