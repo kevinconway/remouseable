@@ -132,7 +132,7 @@ type PositionScaler interface {
 type Driver interface {
 	MoveMouse(x int, y int) error
 	DragMouse(x int, y int) error
-	Click(eraser bool) error
-	Unclick(eraser bool) error
+	Press(key string) error
+	Release(key string) error
 	GetSize() (width int, height int, err error)
 }

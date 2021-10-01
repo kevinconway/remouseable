@@ -35,6 +35,10 @@ func (r *Runtime) Next() bool {
 		return false
 	}
 	change := r.StateMachine.Current()
+	key := "left"
+	if r.StateMachine.Eraser() {
+		key = "right"
+	}
 	switch change.Type() {
 	case ChangeTypeMove:
 		evt := change.(*StateChangeMove)
@@ -51,13 +55,13 @@ func (r *Runtime) Next() bool {
 		}
 		return true
 	case ChangeTypeClick:
-		if err := r.Driver.Click(r.StateMachine.Eraser()); err != nil {
+		if err := r.Driver.Press(key); err != nil {
 			r.err = err
 			return false
 		}
 		return true
 	case ChangeTypeUnclick:
-		if err := r.Driver.Unclick(r.StateMachine.Eraser()); err != nil {
+		if err := r.Driver.Release(key); err != nil {
 			r.err = err
 			return false
 		}

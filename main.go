@@ -47,7 +47,7 @@ func main() {
 	evtFile := fs.String("event-file", "/dev/input/event0", "The path on the tablet from which to read evdev events. Probably don't change this.")
 	debugEvents := fs.Bool("debug-events", false, "Stream hardware events from the tablet instead of acting as a mouse. This is for debugging.")
 	disableDrag := fs.Bool("disable-drag-event", false, "Disable use of the custom OSX drag event. Only use this drawing on an Apple device is not working as expected.")
-	pressureThreshold := fs.Int("pressure-threshold", 1000, "Change the click detection sensitivity. 1000 is when the pen makes contact with the tablet. Set higher to require more pen pressure for a click.")
+	pressureThreshold := fs.Int("pressure-threshold", 500, "Change the click detection sensitivity. Set higher to require more pen pressure for a click.")
 	_ = fs.Parse(os.Args[1:])
 
 	if *sshPassword == "-" {
