@@ -3,8 +3,10 @@
 > Use your reMarkable tablet as a mouse.
 
 - [reMouseable](#remouseable)
+  - [Project Status](#project-status)
+    - [Alternative Projects](#alternative-projects)
   - [Overview](#overview)
-  - [Code Documentation](#code-documentation)
+  - [Code And Developer Documentation](#code-and-developer-documentation)
   - [Installation](#installation)
     - [Windows](#windows)
     - [OSX](#osx)
@@ -26,7 +28,27 @@
   - [License](#license)
   - [Developing](#developing)
   - [Thanks](#thanks)
-  - [Future Features](#future-features)
+
+## Project Status
+
+The project is stable and works for Remarkable 1 and Remarkable 2 tablets. I
+will continue to have the latest release [available for
+download](https://github.com/kevinconway/remouseable/releases).
+
+Due to time constraints, I will no longer provide support through GitHub issues
+or email. I will also no longer review pull requests that modify the project
+code. If you want to add new features then please fork the project.
+
+### Alternative Projects
+
+If you are concerned that I'm no longer developing this project and want a more
+active alternative then your best choice is
+<https://github.com/Evidlo/remarkable_mouse>. It is actively developed and
+supports more features than this project such as multi-monitor support.
+
+If you are maintaining a fork of this project with new features and would like
+to be mentioned here then make a PR to update this section of the README. Note
+that my response to the PR will likely be slow.
 
 ## Overview
 
@@ -39,11 +61,14 @@ There's a great implementation of this feature written in Python at
 implementation so that I can offer pre-built binaries that don't require a
 specific language to be installed on the host machine.
 
-## Code Documentation
+## Code And Developer Documentation
 
 This README contains how-to information for installing, configuration, and using
 the project. To view the code API documentation check out the
 [godocs](https://godoc.org/github.com/kevinconway/remouseable).
+
+If you would like to modify the project or add a feature then see the technical
+documentation in the `technical-documentation` directory.
 
 ## Installation
 
@@ -399,14 +424,12 @@ easier. Some make targets of note:
 
 ## Thanks
 
-I used the https://github.com/gvalkov/golang-evdev project as a reference when
+I used the <https://github.com/gvalkov/golang-evdev> project as a reference when
 implementing the `evdev` parser. I didn't use it directly because it is very
 much oriented towards directly opening and managing a file descriptor for a
 device. This project needs to read data from a remote device.
 
-## Future Features
-
-The current state of this project fulfills all of my needs so I'm not planning
-on adding anything new for myself. However, I'm open to helping and reviewing
-contributions if you want add a new feature or make an improvement. Open an
-issue with your idea if you want to talk about how it would best be added.
+I used the <https://github.com/go-vgo/robotgo> project as the basis for
+interacting with the operating system. I embedded portions of it here instead
+of importing the Go package in order to limit the number of dependencies
+required to build the project.
