@@ -1,0 +1,72 @@
+@startuml remouseable_overview
+
+node "reMarkable Tablet" as tablet {
+    folder "Linux" as linux {
+        component "EvDev" as evdev_source
+        component "SSH Agent" as tablet_ssh
+    }
+}
+
+cloud "Network" as network
+
+node "Personal Computer" as pc {
+    folder "Operating System" as pc_os {
+        component "SSH Agent" as pc_ssh
+        component "reMouseable" as remouseable
+        component "Virtual Mouse" as mouse
+    }
+}
+
+remouseable --> pc_ssh
+pc_ssh -> network
+network -> tablet_ssh
+tablet_ssh --> evdev_source
+remouseable -left-> mouse
+
+@enduml
+
+@startuml remouseable_internal
+
+node "reMouseable" as remouseable {
+    component "Runtime" as runtime
+    component "Coordinate Scaler" as scaler
+    component "EvDev Iterator" as iterator
+    component "State Machine" as state
+    component "Driver" as driver
+}
+
+iterator -up-> state
+runtime --> state
+runtime --> scaler
+runtime --> driver
+
+note bottom of iterator
+    Produce a stream of hardware events.
+    Generally, this is sourced from
+    EvDev on the tablet.
+endnote
+
+note bottom of state
+    Convert low level hardware events
+    into state changes. For example,
+    converts pen touching the tablet into
+    a "click" event.
+endnote
+
+note left of driver
+    Issues system specific commands to
+    move or operate the mouse.
+endnote
+
+note top of scaler
+    Convert tablet X,Y coordinates into
+    X,Y coordinates of a different
+    screen.
+endnote
+
+note top of runtime
+    Coordinate between the state machine,
+    scaler, and driver.
+endnote
+
+@enduml
