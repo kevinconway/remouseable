@@ -35,11 +35,13 @@ func main() {
 
 	fs := flag.NewFlagSet("remouseable", flag.ExitOnError)
 	orientation := fs.String("orientation", "right", "Orientation of the tablet. Choices are vertical, right, and left")
-	tabletHeight := fs.Int("tablet-height", remouseable.DefaultTabletHeight, "The max units per millimeter for the hight of the tablet. Probably don't change this.")
-	tabletWidth := fs.Int("tablet-width", remouseable.DefaultTabletWidth, "The max units per millimeter for the width of the tablet. Probably don't change this.")
+	tabletHeight := fs.Int("tablet-height", remouseable.DefaultTabletHeight, "The max units for the height of the tablet. Probably don't change this.")
+	tabletWidth := fs.Int("tablet-width", remouseable.DefaultTabletWidth, "The max units for the width of the tablet. Probably don't change this.")
 	tmpScreenWidth, tmpScreenHeight, _ := driver.GetSize()
-	screenHeight := fs.Int("screen-height", tmpScreenHeight, "The max units per millimeter of the host screen height. Probably don't change this.")
-	screenWidth := fs.Int("screen-width", tmpScreenWidth, "The max units per millimeter of the host screen width. Probably don't change this.")
+	screenWidth := fs.Int("screen-width", tmpScreenWidth, "Width of area confining the tablet pointer.");
+	screenHeight := fs.Int("screen-height", tmpScreenHeight, "Height of area confining the tablet pointer.");
+	screenOffsetX := fs.Int("screen-offset-x", 0, "X offset on the screen to area confining the tablet pointer.")
+	screenOffsetY := fs.Int("screen-offset-y", 0, "Y offset on the screen to area confining the tablet pointer.")
 	sshIP := fs.String("ssh-ip", "10.11.99.1:22", "The host and port of a tablet.")
 	sshUser := fs.String("ssh-user", "root", "The ssh username to use when logging into the tablet.")
 	sshPassword := fs.String("ssh-password", "", "An optional password to use when ssh-ing into the tablet. Use - for a prompt rather than entering a value. If not given then public/private keypair authentication is used.")
@@ -156,6 +158,8 @@ func main() {
 			TabletHeight: *tabletHeight,
 			ScreenWidth:  *screenWidth,
 			ScreenHeight: *screenHeight,
+			ScreenOffsetX: *screenOffsetX,
+			ScreenOffsetY: *screenOffsetY,
 		}
 	case "left":
 		sc = &remouseable.LeftPositionScaler{
@@ -163,6 +167,8 @@ func main() {
 			TabletHeight: *tabletHeight,
 			ScreenWidth:  *screenWidth,
 			ScreenHeight: *screenHeight,
+			ScreenOffsetX: *screenOffsetX,
+			ScreenOffsetY: *screenOffsetY,
 		}
 	case "vertical":
 		sc = &remouseable.VerticalPositionScaler{
@@ -170,6 +176,8 @@ func main() {
 			TabletHeight: *tabletHeight,
 			ScreenWidth:  *screenWidth,
 			ScreenHeight: *screenHeight,
+			ScreenOffsetX: *screenOffsetX,
+			ScreenOffsetY: *screenOffsetY,
 		}
 	default:
 		panic(fmt.Sprintf("unknown orienation selection %s", *orientation))

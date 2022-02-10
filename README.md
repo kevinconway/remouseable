@@ -235,14 +235,16 @@ Usage of remouseable:
       --event-file string        The path on the tablet from which to read evdev events. Probably don't change this. (default "/dev/input/event0")
       --orientation string       Orientation of the tablet. Choices are vertical, right, and left (default "right")
       --pressure-threshold int   Change the click detection sensitivity. 1000 is when the pen makes contact with the tablet. Set higher to require more pen pressure for a click. (default 1000)
-      --screen-height int        The max units per millimeter of the host screen height. Probably don't change this. (default 1080)
-      --screen-width int         The max units per millimeter of the host screen width. Probably don't change this. (default 1920)
+      --screen-width int         Width of area confining the tablet pointer (defaults to full desktop width)
+      --screen-height int        Height of area confining the tablet pointer (defaults to full desktop height)
+      --screen-offset-x int      X offset of area confining the tablet pointer (defaults to 0)
+      --screen-offset-y int      T offset of area confining the tablet pointer (defaults to 0)
       --ssh-ip string            The host and port of a tablet. (default "10.11.99.1:22")
       --ssh-password string      An optional password to use when ssh-ing into the tablet. Use - for a prompt rather than entering a value. If not given then public/private keypair authentication is used.
       --ssh-socket string        Path to the SSH auth socket. This must not be empty if using public/private keypair authentication.
       --ssh-user string          The ssh username to use when logging into the tablet. (default "root")
-      --tablet-height int        The max units per millimeter for the hight of the tablet. Probably don't change this. (default 15725)
-      --tablet-width int         The max units per millimeter for the width of the tablet. Probably don't change this. (default 20967)
+      --tablet-height int        The max units for the hight of the tablet. Probably don't change this. (default 15725)
+      --tablet-width int         The max units for the width of the tablet. Probably don't change this. (default 20967)
 pflag: help requested
 exit status 2
 ```

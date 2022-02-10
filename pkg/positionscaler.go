@@ -42,6 +42,8 @@ type RightPositionScaler struct {
 	TabletHeight int
 	ScreenWidth  int
 	ScreenHeight int
+	ScreenOffsetX int
+	ScreenOffsetY int
 }
 
 // ScalePosition resolves based on a hoizontal position of the tablet.
@@ -55,7 +57,7 @@ func (s *RightPositionScaler) ScalePosition(x int, y int) (int, int) {
 	scaleX := float64(s.ScreenWidth) / float64(s.TabletWidth)
 	scaleY := float64(s.ScreenHeight) / float64(s.TabletHeight)
 	// Apply the scaling factor to the points.
-	return int(scaleX * float64(x)), int(scaleY * float64(y))
+	return s.ScreenOffsetX + int(scaleX * float64(x)), s.ScreenOffsetY + int(scaleY * float64(y))
 }
 
 // LeftPositionScaler converts points from a left-horizontally positioned
@@ -65,6 +67,8 @@ type LeftPositionScaler struct {
 	TabletHeight int
 	ScreenWidth  int
 	ScreenHeight int
+	ScreenOffsetX int
+	ScreenOffsetY int
 }
 
 // ScalePosition resolves based on a hoizontal position of the tablet.
@@ -80,7 +84,7 @@ func (s *LeftPositionScaler) ScalePosition(x int, y int) (int, int) {
 	scaleX := float64(s.ScreenWidth) / float64(s.TabletWidth)
 	scaleY := float64(s.ScreenHeight) / float64(s.TabletHeight)
 	// Apply the scaling factor to the points.
-	return int(scaleX * float64(x)), int(scaleY * float64(y))
+	return s.ScreenOffsetX + int(scaleX * float64(x)), s.ScreenOffsetY + int(scaleY * float64(y))
 }
 
 // VerticalPositionScaler converts points from a vertically positioned
@@ -90,6 +94,8 @@ type VerticalPositionScaler struct {
 	TabletHeight int
 	ScreenWidth  int
 	ScreenHeight int
+	ScreenOffsetX int
+	ScreenOffsetY int
 }
 
 // ScalePosition resolves based on a vertical position of the tablet.
@@ -111,5 +117,5 @@ func (s *VerticalPositionScaler) ScalePosition(x int, y int) (int, int) {
 	x, y = y, s.TabletWidth-x
 	scaleX := float64(s.ScreenWidth) / float64(s.TabletHeight)
 	scaleY := float64(s.ScreenHeight) / float64(s.TabletWidth)
-	return int(scaleX * float64(x)), int(scaleY * float64(y))
+	return s.ScreenOffsetX + int(scaleX * float64(x)), s.ScreenOffsetY + int(scaleY * float64(y))
 }
