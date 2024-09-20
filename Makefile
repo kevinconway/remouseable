@@ -1,5 +1,5 @@
 .PHONY : update updatetools tools
-.PHONY : lint test integration coverage 
+.PHONY : lint test integration coverage
 .PHONY : build
 .PHONY : clean cleancoverage cleantools
 
@@ -77,37 +77,6 @@ test: $(BINDIR) $(COVERDIR)
 		-coverprofile="$(COVERDIR)/unit.out" \
 		./...
 
-integration: $(BINDIR) $(COVERDIR)
-	# Integration tests leverage docker-compose to manage
-	# test depenencies and state isolation. The _runintegration
-	# command is always executed from within the container which
-	# will use the 'go test' command with build tags 'integration'
-	# targeted at the local /tests directory.
-	DIR=$(PROJECT_PATH) \
-	docker-compose \
-		-f docker-compose.integration.yaml \
-		up \
-			--abort-on-container-exit \
-			--build \
-			--exit-code-from test
-
-_runintegration:
-	# This is a "private" rule that is usually used within
-	# the integration testing container. If you run it
-	# directly then you must have already orchestrated any
-	# test dependencies and set any relevant environment
-	# variables.
-	GO111MODULE=on \
-	GOFLAGS="$(GOFLAGS)" \
-	go test \
-		-v \
-		-tags=integration \
-		-cover \
-		-race \
-		-coverpkg="$(UNIT_PKGS)" \
-		-coverprofile="$(COVERDIR)/integration.out" \
-		./tests
-
 build: $(BUILDDIR)
 	# Optionally build the service if it has an executable
 	# present in the project root.
@@ -170,7 +139,7 @@ $(COVERDIR)/%.html: $(COVERDIR)/%.interchange
 	GOFLAGS="$(GOFLAGS)" \
 	$(BINDIR)/gocov-html > $@
 
-$(COVERDIR): 
+$(COVERDIR):
 	mkdir -p $(COVERDIR)
 
 clean: cleancoverage cleantools ;

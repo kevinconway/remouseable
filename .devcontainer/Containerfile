@@ -1,0 +1,22 @@
+FROM docker.io/golang:1-bookworm
+
+RUN apt-get update && apt-get install --yes \
+    curl wget gpg \
+    make git vim less \
+    sudo \
+    bash-completion man \
+    gcc libc6-dev libx11-dev xorg-dev libxtst-dev \
+    gcc-multilib gcc-mingw-w64
+
+# Create a non-root user so linux users can run the container as the current
+# OS user. See https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
+# and https://github.com/devcontainers/spec/blob/main/docs/specs/devcontainer-reference.md#container-creation
+# for more information.
+ARG USERNAME=dev
+ARG USER_UID=1010
+ARG USER_GID=1010
+
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
