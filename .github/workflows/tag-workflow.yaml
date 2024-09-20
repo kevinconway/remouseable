@@ -28,8 +28,12 @@ jobs:
         run: mkdir -p .build && CC=x86_64-w64-mingw32-gcc CGO_ENABLED=1 GOOS=windows go build -o .build/windows.exe main.go
       - name: Add Linux Artifact To Release
         run: gh release upload ${{github.event.release.tag_name}} .build/linux --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: Add Windows Artifact To Release
         run: gh release upload ${{github.event.release.tag_name}} .build/windows.exe --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
   osx:
     name: OSX Releases
     runs-on: macos-latest
@@ -47,5 +51,9 @@ jobs:
         run: mkdir -p .build && CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -o .build/osx-arm main.go
       - name: Add OSX AMD64 Artifact To Release
         run: gh release upload ${{github.event.release.tag_name}} .build/osx-amd --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: Add OSX ARM64 Artifact To Release
         run: gh release upload ${{github.event.release.tag_name}} .build/osx-arm --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
