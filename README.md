@@ -3,8 +3,7 @@
 > Use your reMarkable tablet as a mouse.
 
 - [reMouseable](#remouseable)
-  - [Project Status](#project-status)
-    - [Alternative Projects](#alternative-projects)
+  - [Update From September 19, 2024](#update-from-september-19-2024)
   - [Overview](#overview)
   - [Code And Developer Documentation](#code-and-developer-documentation)
   - [Installation](#installation)
@@ -29,26 +28,34 @@
   - [Developing](#developing)
   - [Thanks](#thanks)
 
-## Project Status
+## Update From September 19, 2024
 
-The project is stable and works for Remarkable 1 and Remarkable 2 tablets. I
-will continue to have the latest release [available for
-download](https://github.com/kevinconway/remouseable/releases).
+I somewhat recently had a one-off need to connect my tablet and run remouseable
+again. Once my tablet installed the last few years of updates then I hit the
+same issue as anyone else trying to use this project over the past year and a
+half to two years. I'm sharing the fix with folks in case someone finds it
+useful but **remouseable is still discontinued**.
 
-Due to time constraints, I will no longer provide support through GitHub issues
-or email. I will also no longer review pull requests that modify the project
-code. If you want to add new features then please fork the project.
+Remousable was broken for long enough that I expect nearly everyone who once
+used it has moved on. If you start using it again or are considering using it
+for the first time then I wish you the best. Please understand, though, that I
+do not have time to support you if you need help or encounter an issue. I've
+left the GitHub issues enabled so anyone using this can request or offer help to
+others but I do not monitor the issues and will not respond to them myself.
 
-### Alternative Projects
+You can download the fixed executables from
+https://github.com/kevinconway/remouseable/releases and follow this README's
+instructions on how to install them. However, consider
+https://github.com/Evidlo/remarkable_mouse as a replacement that continued
+working while remouseable was broken and continues to have people contributing
+to it. It also supports more features than this project such as multi-monitor
+support.
 
-If you are concerned that I'm no longer developing this project and want a more
-active alternative then your best choice is
-<https://github.com/Evidlo/remarkable_mouse>. It is actively developed and
-supports more features than this project such as multi-monitor support.
-
-If you are maintaining a fork of this project with new features and would like
-to be mentioned here then make a PR to update this section of the README. Note
-that my response to the PR will likely be slow.
+If you are a developer and want to add new features then please fork the
+project. I've added GitHub actions workflows to automate building new
+executables and a [devcontainer](https://containers.dev/) to make running a fork
+even easier. If you maintain a fork with newer or better features than mine then
+I'm happy to add a link to your project here.
 
 ## Overview
 
@@ -89,7 +96,8 @@ If a new version of the program comes out then you can overwrite your
 ### OSX
 
 Go to <https://github.com/kevinconway/remouseable/releases/latest> and download
-the file named `osx`. Then rename the file to `remouseable`. Next, make the
+the file named `osx-arm` if using an M series model or `osx-amd` if using a
+model older than M1. Then rename the file to `remouseable`. Next, make the
 program runnable with by opening a command line prompt and:
 
 ```shell
@@ -135,6 +143,14 @@ You can now run the program by opening a command line prompt and:
 cd ~/Downloads
 ./remouseable
 ```
+
+Note that project only works in an X11 environment. If your system uses Wayland
+then touching the tablet with the mouse will result in a remote desktop prompt
+due to something related to Wayland's X11 backwards compatibility choices. Even
+if you allow the connection the application will not work correctly. Some forum
+threads such as [this](https://discussion.fedoraproject.org/t/fedora-39-keeps-spaming-confirmation-remote-desktop-window/98323)
+or [this](https://discussion.fedoraproject.org/t/getting-spammed-with-remote-desktop-connection-window/115561)
+may provide some help but Wayland is technically not supported.
 
 ## Usage
 

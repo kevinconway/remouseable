@@ -63,6 +63,15 @@ func main() {
 		Auth: []ssh.AuthMethod{
 			ssh.Password(*sshPassword),
 		},
+		HostKeyAlgorithms: []string{
+			"ecdsa-sha2-nistp256",
+			"ecdsa-sha2-nistp384",
+			"ecdsa-sha2-nistp521",
+			"ssh-ed25519",
+			"rsa-sha2-256",
+			"rsa-sha2-512",
+			"ssh-rsa",
+		},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 	if *sshPassword == "" {
@@ -74,12 +83,8 @@ func main() {
 
 		agentSigner := agent.NewClient(agentFd)
 
-		sshConfig = &ssh.ClientConfig{
-			User: *sshUser,
-			Auth: []ssh.AuthMethod{
-				ssh.PublicKeysCallback(agentSigner.Signers),
-			},
-			HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+		sshConfig.Auth = []ssh.AuthMethod{
+			ssh.PublicKeysCallback(agentSigner.Signers),
 		}
 	}
 

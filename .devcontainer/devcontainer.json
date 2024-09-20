@@ -1,0 +1,38 @@
+{
+    "name": "remouseable",
+    "build": {
+        "dockerfile": "Containerfile",
+        "context": ".."
+    },
+    "remoteUser": "dev",
+    "updateRemoteUserUID": true,
+    "containerEnv": {},
+    "mounts": [],
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "telemetry.telemetryLevel": "off",
+                "telemetry.enableTelemetry": false,
+                "files.insertFinalNewline": true,
+                "files.trimTrailingWhitespace": true,
+                "rewrap.wrappingColumn": 80,
+                "go.formatTool": "goimports",
+                "go.lintTool": "golangci-lint",
+                "terminal.integrated.profiles.linux": {
+                    "bash": {
+                        "path": "/usr/bin/bash"
+                    }
+                },
+                "terminal.integrated.defaultProfile.linux": "bash"
+            },
+            "extensions": [
+                "golang.go",
+                "streetsidesoftware.code-spell-checker",
+                "stkb.rewrap",
+                "ms-vscode.makefile-tools",
+                "redhat.vscode-yaml",
+                "ms-vscode.cpptools-extension-pack"
+            ]
+        }
+    }
+}
