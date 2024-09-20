@@ -220,7 +220,7 @@ func main() {
 	)
 
 	if *dst == "-" {
-		if err := f.Render(os.Stdout); err != nil {
+		if err = f.Render(os.Stdout); err != nil {
 			panic(err)
 		}
 		return

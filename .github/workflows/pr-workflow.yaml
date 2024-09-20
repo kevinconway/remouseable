@@ -15,6 +15,8 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: 'stable'
+      - name: Install Linux Build Dependencies
+        run: sudo apt-get install --yes gcc libc6-dev libx11-dev xorg-dev libxtst-dev
       - uses: actions/cache@v4
         id: tools
         with:
@@ -40,9 +42,9 @@ jobs:
       - name: Install Windows Build Dependencies
         run: sudo apt-get install --yes gcc-multilib gcc-mingw-w64
       - name: Build Linux
-        run: mkdir .build && go build -o .build/linux main.go
+        run: mkdir -p .build && CGO_ENABLED=1 go build -o .build/linux main.go
       - name: Build Windows
-        run: mkdir .build && CC=x86_64-w64-mingw32-gcc GOOS=windows go build -o .build/windows.exe main.go
+        run: mkdir -p .build && CC=x86_64-w64-mingw32-gcc CGO_ENABLED=1 GOOS=windows go build -o .build/windows.exe main.go
   osx:
     name: OSX Builds
     runs-on: macos-latest
@@ -55,6 +57,6 @@ jobs:
         with:
           xcode-version: latest-stable
       - name: Build OSX AMD64
-        run: mkdir .build && GOOS=darwin GOARCH=amd64 go build -o .build/osx-amd main.go
+        run: mkdir -p .build && CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -o .build/osx-amd main.go
       - name: Build OSX ARM64
-        run: mkdir .build && GOOS=darwin GOARCH=arm64 go build -o .build/osx-arm main.go
+        run: mkdir -p .build && CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -o .build/osx-arm main.go
