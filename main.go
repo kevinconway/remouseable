@@ -16,7 +16,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net"
 	"os"
 	"syscall"
@@ -24,7 +24,7 @@ import (
 	flag "github.com/spf13/pflag"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/agent"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 
 	remouseable "github.com/kevinconway/remouseable/pkg"
 )
@@ -52,7 +52,7 @@ func main() {
 
 	if *sshPassword == "-" {
 		fmt.Print("Enter Password: ")
-		pwd, err := terminal.ReadPassword(int(syscall.Stdin))
+		pwd, err := term.ReadPassword(int(syscall.Stdin))
 		if err != nil {
 			panic(err)
 		}
@@ -72,7 +72,7 @@ func main() {
 			"rsa-sha2-512",
 			"ssh-rsa",
 		},
-		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(), //nolint:gosec
 	}
 	if *sshPassword == "" {
 		agentFd, err := net.Dial("unix", *sshSocket)
@@ -109,7 +109,7 @@ func main() {
 	if *debugEvents {
 		it := &remouseable.SelectingEvdevIterator{
 			Wrapped: &remouseable.FileEvdevIterator{
-				Source: ioutil.NopCloser(pipe),
+				Source: io.NopCloser(pipe),
 			},
 			Selection: []uint16{remouseable.EV_ABS},
 		}
@@ -133,7 +133,7 @@ func main() {
 
 	it := &remouseable.SelectingEvdevIterator{
 		Wrapped: &remouseable.FileEvdevIterator{
-			Source: ioutil.NopCloser(pipe),
+			Source: io.NopCloser(pipe),
 		},
 		Selection: []uint16{remouseable.EV_ABS},
 	}

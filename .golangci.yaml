@@ -28,7 +28,7 @@ run:
   # and testing system. If invoked with -mod=vendor, the go command assumes that
   # the vendor directory holds the correct copies of dependencies and ignores
   # the dependency descriptions in go.mod.
-  modules-download-mode: vendor
+  modules-download-mode: readonly
 
 
 # output configuration options
@@ -138,7 +138,9 @@ linters-settings:
     range-loops: true # Report preallocation suggestions on range loops, true by default
     for-loops: true # Report preallocation suggestions on for loops, false by default
 linters:
-  enable-all: true
+  presets:
+    - bugs
+    - test
   disable:
     - depguard
     - gocritic
@@ -148,6 +150,11 @@ linters:
     - gocognit
     - unused # Disabled because it seems to break if there is no vendor.
     - typecheck # Disabled because it seems to break if there is no vendor.
+    - testifylint # Added to lint suite after project started
+    - testpackage # Added to lint suite after project started
+    - paralleltest # Added to lint suite after project started
+    - exhaustivestruct # Added to lint suite after project started
+    - exhaustruct # Added to lint suite after project started
 
 issues:
   # List of regexps of issue texts to exclude, empty list by default. But
